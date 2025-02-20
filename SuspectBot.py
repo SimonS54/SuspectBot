@@ -21,7 +21,7 @@ intents.members = True  # Aktiviert den Zugriff auf Mitglieder
 # Erstelle den Bot mit den definierten Intents
 bot = commands.Bot(command_prefix=["/", "!"], intents=intents)
 
-STATS_FILE = 'stats.json'
+STATS_FILE = 'data/stats.json'
 
 def save_stats():
     with open(STATS_FILE, 'w') as f:
