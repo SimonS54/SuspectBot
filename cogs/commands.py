@@ -58,7 +58,7 @@ class GeneralCommands(commands.Cog):
                             **Moderation Section:**
                             /announce - Send an announcement
                             /update - Send an update
-                            */productupdate - Update a product status
+                            /productupdate - Update a product status
                 
                             **General Section:**
                             /review - Leave a review
