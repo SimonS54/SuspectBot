@@ -1,7 +1,7 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
-from config import ALLOWED_ROLE_IDS
+from config import ALLOWED_ROLE_IDS, VERIFIED_CUSTOMER_ROLE_ID
 
 class EPVP(commands.Cog):
     def __init__(self, bot):
@@ -11,7 +11,7 @@ class EPVP(commands.Cog):
     @app_commands.command(name="epvp", description="Instructions for leaving a EPVP vouch.")
     async def epvp(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
-        if any(role_id in ALLOWED_ROLE_IDS for role_id in user_roles):
+        if any(role_id in ALLOWED_ROLE_IDS + VERIFIED_CUSTOMER_ROLE_ID for role_id in user_roles):
             embed = discord.Embed(
                 title="Elitepvpers Vouch",
                 description="**Please follow these steps:**\n\n"
@@ -45,7 +45,7 @@ class EPVP(commands.Cog):
     @app_commands.command(name="epvptrade", description="Explains how to leave a positive review for a trade.")
     async def epvptrade(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
-        if any(role_id in ALLOWED_ROLE_IDS for role_id in user_roles):
+        if any(role_id in ALLOWED_ROLE_IDS + VERIFIED_CUSTOMER_ROLE_ID for role_id in user_roles):
             embed = discord.Embed(
                 title="Thank you! Your Trade has now been accepted",
                 description="## **Follow the below steps to claim your key:**\n\n"

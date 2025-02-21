@@ -1,7 +1,7 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
-from config import ALLOWED_ROLE_IDS
+from config import ALLOWED_ROLE_IDS, VERIFIED_CUSTOMER_ROLE_ID
 
 class GeneralCommands(commands.Cog):
     def __init__(self, bot):
@@ -11,7 +11,7 @@ class GeneralCommands(commands.Cog):
     @app_commands.command(name="bothelp", description="Shows a commands list.")
     async def bothelp(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
-        if any(role_id in ALLOWED_ROLE_IDS for role_id in user_roles):
+        if any(role_id in ALLOWED_ROLE_IDS + VERIFIED_CUSTOMER_ROLE_ID for role_id in user_roles):
             embed = discord.Embed(
                 title="Commands List",
                 description="List of available commands offered by SuspectBot:\n\n"
@@ -77,7 +77,7 @@ class GeneralCommands(commands.Cog):
     @app_commands.command(name="review", description="Asks the client to leave a review.")
     async def review(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
-        if any(role_id in ALLOWED_ROLE_IDS for role_id in user_roles):
+        if any(role_id in ALLOWED_ROLE_IDS + VERIFIED_CUSTOMER_ROLE_ID for role_id in user_roles):
             embed = discord.Embed(
                 title="Review",
                 description="If you are satisfied with both product and support team we would be pleased to receive a review from you, as this helps us improve our store daily.\n\n"

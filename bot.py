@@ -13,7 +13,7 @@ intents.members = True
 bot = commands.Bot(command_prefix=["/", "!"], intents=intents)
 
 async def load_cogs():
-    for cog in ["commands", "support", "stats", "moderation", "payment", "docs", "epvp", "message_filter"]:
+    for cog in ["commands", "support", "stats", "moderation", "payment", "docs", "epvp", "message_filter", "ai_assistant"]:
         await bot.load_extension(f"cogs.{cog}")
 
 @bot.event

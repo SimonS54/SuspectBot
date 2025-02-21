@@ -5,13 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cd209a74-0b78-4c33-9cb1-66d479fc594d" name="Changes" comment="KC">
-      <change afterPath="$PROJECT_DIR$/cogs/message_filter.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/firebase_config.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cogs/ai_assistant.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/moderation.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/moderation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/stats.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/stats.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cogs/commands.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/commands.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cogs/docs.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/docs.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cogs/epvp.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/epvp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cogs/support.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/support.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/suspectbotdb.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/suspectbotdb.json" afterDir="false" />
     </list>
@@ -54,6 +55,7 @@
     &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;Errors&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -87,7 +89,8 @@
       <workItem from="1740042248678" duration="5659000" />
       <workItem from="1740048465935" duration="18931000" />
       <workItem from="1740082410964" duration="3650000" />
-      <workItem from="1740086157583" duration="13216000" />
+      <workItem from="1740086157583" duration="13992000" />
+      <workItem from="1740129301586" duration="16761000" />
     </task>
     <servers />
   </component>

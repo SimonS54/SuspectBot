@@ -1,7 +1,7 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
-from config import ALLOWED_ROLE_IDS
+from config import ALLOWED_ROLE_IDS, VERIFIED_CUSTOMER_ROLE_ID
 
 class Support(commands.Cog):
     def __init__(self, bot):
@@ -11,7 +11,7 @@ class Support(commands.Cog):
     @app_commands.command(name="supporttool", description="Shows the support tool.")
     async def support_tool(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
-        if any(role_id in ALLOWED_ROLE_IDS for role_id in user_roles):
+        if any(role_id in ALLOWED_ROLE_IDS + VERIFIED_CUSTOMER_ROLE_ID for role_id in user_roles):
             embed = discord.Embed(
                 title="Support Tool",
                 description="To save our staff time and frustration, please take five minutes to download our SupportTool and make sure there are no red options. Then, try starting/injecting the product again. If it still doesn't work, please wait for a staff member to help.\n\n"
@@ -44,7 +44,7 @@ class Support(commands.Cog):
     @app_commands.command(name="virtualization", description="Instructions for enabling/disabling Virtualization.")
     async def virtualization(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
-        if not any(role_id in ALLOWED_ROLE_IDS for role_id in user_roles):
+        if not any(role_id in ALLOWED_ROLE_IDS + VERIFIED_CUSTOMER_ROLE_ID for role_id in user_roles):
             return await interaction.response.send_message("❌ You do not have permission to use this command.")
 
         embed = discord.Embed(
@@ -116,7 +116,7 @@ class Support(commands.Cog):
     @app_commands.command(name="tpm", description="Instructions for enabling/disabling TPM.")
     async def tpm(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
-        if not any(role_id in ALLOWED_ROLE_IDS for role_id in user_roles):
+        if not any(role_id in ALLOWED_ROLE_IDS + VERIFIED_CUSTOMER_ROLE_ID for role_id in user_roles):
             return await interaction.response.send_message("❌ You do not have permission to use this command.")
 
         embed = discord.Embed(
@@ -188,7 +188,7 @@ class Support(commands.Cog):
     @app_commands.command(name="secureboot", description="Instructions for enabling/disabling Secure Boot.")
     async def secureboot(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
-        if not any(role_id in ALLOWED_ROLE_IDS for role_id in user_roles):
+        if not any(role_id in ALLOWED_ROLE_IDS + VERIFIED_CUSTOMER_ROLE_ID for role_id in user_roles):
             return await interaction.response.send_message("❌ You do not have permission to use this command.")
 
         embed = discord.Embed(
@@ -260,7 +260,7 @@ class Support(commands.Cog):
     @app_commands.command(name="coreisolation", description="Shows instructions to disable Core Isolation.")
     async def coreisolation(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
-        if any(role_id in ALLOWED_ROLE_IDS for role_id in user_roles):
+        if any(role_id in ALLOWED_ROLE_IDS + VERIFIED_CUSTOMER_ROLE_ID for role_id in user_roles):
             embed = discord.Embed(
                 title="Core Isolation",
                 description="Core Isolation is a security feature that can cause issues with our products. If a support member or the products prompt you to turn it of, follow the guide below to disable it.\n\n"
@@ -276,7 +276,7 @@ class Support(commands.Cog):
     @app_commands.command(name="vc64", description="Instructions for installing the Visual C++ redistributables.")
     async def vc64(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
-        if any(role_id in ALLOWED_ROLE_IDS for role_id in user_roles):
+        if any(role_id in ALLOWED_ROLE_IDS + VERIFIED_CUSTOMER_ROLE_ID for role_id in user_roles):
             embed = discord.Embed(
                 title="Visual C++ Redistributables",
                 description="Some of our products may need both C++ redistributables and directx to be installed on your computer to work as expected. Usually these installations already are installed by you downloading different games or from other sources. If that is not the case, please download them via the links below.\n\n"
