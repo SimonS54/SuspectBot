@@ -20,9 +20,18 @@ ANNOUNCE_TARGET_CHANNEL_ID = 1297999047935791145
 UPDATE_COMMAND_CHANNEL_ID = 1297999872829689999
 UPDATE_TARGET_CHANNEL_ID = 1298001935948972043
 
-# Allowed Users
-ALLOWED_USERS = [
-    1039903232023081010, 397469006946238476, 806944542284709919,
-    1112883021406814248, 1138093567248695337, 756169131639701585,
-    368435292916416512, 1022589611496710164, 206166974269489154
-]
+# Allowed Words for Message Filter
+ALLOWED_WORDS = ['insane', 'problems', 'problem', 'bad', 'issues', 'great', 'love', 'good', 'awesome',
+                 'fantastic', 'insane', 'perfect', 'best', 'nice', '10/10', '/', '+', '-', 'support',
+                 'staff', 'team', 'amazing', 'fantastic', 'incredible', 'outstanding', 'superb',
+                 'exceptional', 'wonderful', 'fabulous', 'phenomenal', 'spectacular', 'brilliant',
+                 'remarkable', 'stellar', 'terrific', 'marvelous', 'top-notch', 'impressive',
+                 'magnificent', 'high-quality', 'well-made', 'durable', 'reliable', 'affordable',
+                 'user-friendly', 'unique', 'creative', 'stylish', 'modern', 'beautiful', 'elegant',
+                 'comfortable', 'convenient', 'effective', 'efficient', 'love it', 'highly recommend',
+                 'worth every penny', 'exceeded expectations', 'better than expected', 'would buy again',
+                 'must-have', 'go-to choice', 'works perfectly', 'game-changer', 'life-saver',
+                 'excellent service', 'fast delivery', 'helpful staff', 'friendly', 'responsive',
+                 'polite', 'knowledgeable', 'fast', 'powerful', 'quiet', 'smooth', 'accurate', 'safe',
+                 'versatile', 'affordable', 'cost-effective', 'reasonable', 'good deal', 'great value',
+                 'worth it', 'kudos', '5-star', 'unbeatable', 'fantastic buy', 'thank you', '100%']

@@ -3,17 +3,13 @@ from discord import app_commands
 from discord.ext import commands
 import logging
 import firebase_admin
+from firebase_config import db
 from firebase_admin import credentials, firestore
 from config import ANNOUNCE_COMMAND_CHANNEL_ID, ANNOUNCE_TARGET_CHANNEL_ID, UPDATE_COMMAND_CHANNEL_ID, UPDATE_TARGET_CHANNEL_ID, STATUS_CHANNEL_ID, ALLOWED_ROLE_IDS
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-# Firebase setup
-cred = credentials.Certificate("data/suspectbotdb.json")
-firebase_admin.initialize_app(cred)
-db = firestore.client()
 
 # Autocomplete function for product names
 async def product_autocomplete(interaction: discord.Interaction, current: str):
@@ -157,6 +153,7 @@ class StatusUpdateView(discord.ui.View):
         self.product = product
         self.client = client
 
+    # Helper method to update the status of a product
     async def update_status(self, interaction: discord.Interaction, status: str, emoji: str):
         doc_ref = db.collection("product_status").document(self.product)
         doc_ref.update({"status": status})
@@ -179,6 +176,7 @@ class StatusUpdateView(discord.ui.View):
     async def updating_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         await self.update_status(interaction, "Updating", "🔵")
 
+# Helper method to update the status embed
 async def update_status_embed(client):
     channel = client.get_channel(STATUS_CHANNEL_ID)
     if not channel:
@@ -195,6 +193,7 @@ async def update_status_embed(client):
         "Updating": "🔵"
     }
 
+    # Add a field for each product
     for doc in products:
         data = doc.to_dict()
         status = data["status"]
@@ -212,6 +211,7 @@ class StickyBotEmbedRemover(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    # Remove sticky bot embeds from the status channel
     @commands.Cog.listener()
     async def on_message(self, message):
         if message.channel.id == STATUS_CHANNEL_ID and message.author.id == 628400349979344919:

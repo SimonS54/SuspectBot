@@ -5,18 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cd209a74-0b78-4c33-9cb1-66d479fc594d" name="Changes" comment="KC">
-      <change afterPath="$PROJECT_DIR$/data/suspectbotdb.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cogs/message_filter.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/firebase_config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/commands.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/commands.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cogs/moderation.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/moderation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cogs/stats.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/stats.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/suspectbotdb-firebase-adminsdk-fbsvc-400e6b56e0.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/stats.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/helpers.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/suspectbotdb.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/suspectbotdb.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,7 +87,7 @@
       <workItem from="1740042248678" duration="5659000" />
       <workItem from="1740048465935" duration="18931000" />
       <workItem from="1740082410964" duration="3650000" />
-      <workItem from="1740086157583" duration="5315000" />
+      <workItem from="1740086157583" duration="13216000" />
     </task>
     <servers />
   </component>
