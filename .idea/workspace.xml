@@ -5,16 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cd209a74-0b78-4c33-9cb1-66d479fc594d" name="Changes" comment="KC">
-      <change afterPath="$PROJECT_DIR$/cogs/ai_assistant.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cogs/errors.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/SuspectBot.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/SuspectBot.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/commands.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/commands.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/docs.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/docs.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/epvp.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/epvp.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/support.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/support.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cogs/ai_assistant.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/ai_assistant.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/suspectbotdb.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/suspectbotdb.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,7 +89,11 @@
       <workItem from="1740048465935" duration="18931000" />
       <workItem from="1740082410964" duration="3650000" />
       <workItem from="1740086157583" duration="13992000" />
-      <workItem from="1740129301586" duration="16761000" />
+      <workItem from="1740129301586" duration="17026000" />
+      <workItem from="1740150781536" duration="608000" />
+      <workItem from="1740151953623" duration="14619000" />
+      <workItem from="1740230574952" duration="23643000" />
+      <workItem from="1740276643511" duration="308000" />
     </task>
     <servers />
   </component>

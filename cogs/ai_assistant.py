@@ -14,7 +14,6 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Define Discord commands for the AI to reference
 COMMAND_LIST = {
-    # [Your existing COMMAND_LIST remains unchanged]
     "/apexlite": "Get Guide for Apex Lite",
     "/apexkernaim": "Get Guide for Apex Kernaim",
     "/codkernaim": "Get Guide for COD Kernaim",
@@ -54,13 +53,14 @@ COMMAND_LIST = {
     "/stats": "Retrieve ticket stats of the support team"
 }
 
+MAX_TICKETS = 250
+
 class AIAssistant(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.active_tickets = {}  # In-memory cache of ticket IDs
+        self.active_tickets = {}
 
     async def cog_load(self):
-        """ Called when the cog is loaded; initialize existing tickets from Firestore. """
         print("Initializing AIAssistant with existing tickets...")
         tickets_ref = db.collection("tickets")
         tickets = tickets_ref.stream()
@@ -70,21 +70,35 @@ class AIAssistant(commands.Cog):
             print(f"Loaded ticket: {ticket_id}")
         print(f"Initialized with {len(self.active_tickets)} tickets.")
 
+    async def enforce_ticket_limit(self):
+        """ Ensure the tickets collection stays under MAX_TICKETS by removing the oldest ones based on created_at. """
+        tickets_ref = db.collection("tickets")
+        tickets = list(tickets_ref.order_by("created_at").stream())  # Order by creation timestamp
+        if len(tickets) > MAX_TICKETS:
+            tickets_to_remove = tickets[:len(tickets) - MAX_TICKETS]  # Keep the newest 250
+            for ticket in tickets_to_remove:
+                ticket_id = ticket.id
+                ticket.reference.delete()
+                if ticket_id in self.active_tickets:
+                    del self.active_tickets[ticket_id]
+                print(f"Removed old ticket: {ticket_id}")
+            print(f"Ticket count reduced to {MAX_TICKETS}.")
+
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.author.bot:  # Ignore bot messages
+        if message.author.bot:
             return
 
-        if message.channel.category_id not in CATEGORY_IDS:  # Only process messages in ticket categories
+        if message.channel.category_id not in CATEGORY_IDS:
             return
 
         ticket_id = str(message.channel.id)
         user_id = str(message.author.id)
 
-        # Store conversation in Firestore
         doc_ref = db.collection("tickets").document(ticket_id)
         doc = doc_ref.get()
 
+        new_ticket = not doc.exists
         if doc.exists:
             ticket_data = doc.to_dict()
             ticket_data["messages"].append({
@@ -94,29 +108,30 @@ class AIAssistant(commands.Cog):
             })
             doc_ref.update({"messages": ticket_data["messages"]})
         else:
-            # New ticket detected
+            # New ticket detected, add created_at field
             doc_ref.set({
                 "ticket_id": ticket_id,
+                "created_at": datetime.datetime.utcnow(),  # Add creation timestamp
                 "messages": [{
                     "user_id": user_id,
                     "content": message.content,
                     "timestamp": datetime.datetime.utcnow()
                 }]
             })
-            self.active_tickets[ticket_id] = True  # Add to in-memory cache
+            self.active_tickets[ticket_id] = True
             print(f"New ticket created and cached: {ticket_id}")
 
-        # Trigger AI suggestion immediately for this message
+        if new_ticket:
+            await self.enforce_ticket_limit()
+
         await self.check_for_suggestions(message.channel, ticket_id)
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
-        """ Handles staff feedback on AI suggestions. """
         if user.bot:
             return
 
         print(f"✅ Reaction detected: {reaction.emoji} from {user.name}")
-
         review_channel = self.bot.get_channel(AI_REVIEW_CHANNEL_ID)
         if reaction.message.channel.id != review_channel.id:
             print("❌ Reaction not in AI review channel")
@@ -139,17 +154,13 @@ class AIAssistant(commands.Cog):
             approved_ref = db.collection("approved_responses").document(ticket_id)
             approved_ref.set({"responses": firestore.ArrayUnion([ai_response])}, merge=True)
             await reaction.message.channel.send(f"{user.mention} ✅ AI response approved and saved for future learning!", delete_after=5)
-
         elif reaction.emoji == "👎":
             print(f"❌ Rejecting AI response for ticket {ticket_id}")
             doc_list[0].reference.update({"rejected": True})
             await reaction.message.channel.send(f"{user.mention} ❌ AI response rejected. The bot will learn from this.", delete_after=5)
 
     async def check_for_suggestions(self, channel, ticket_id):
-        """ Generate AI response based on stored conversation. """
         review_channel = self.bot.get_channel(AI_REVIEW_CHANNEL_ID)
-
-        # Retrieve conversation history
         doc_ref = db.collection("tickets").document(ticket_id)
         doc = doc_ref.get()
         if not doc.exists:
@@ -157,17 +168,14 @@ class AIAssistant(commands.Cog):
             return
 
         messages = doc.to_dict().get("messages", [])
-        if len(messages) < 1:  # Relaxed from 3 to 1 so it triggers on first message
+        if len(messages) < 1:
             print(f"Ticket {ticket_id} has no messages yet.")
             return
 
-        # Separate the last message and prior context
         last_message = messages[-1]["content"]
         prior_context = "\n".join([f"User {m['user_id']}: {m['content']}" for m in messages[:-1][-9:]])
 
-        # Generate AI response
         ai_response = await self.generate_ai_response(prior_context, last_message)
-
         if ai_response:
             doc_ref = db.collection("ai_suggestions").document()
             suggestion_data = {
@@ -189,7 +197,6 @@ class AIAssistant(commands.Cog):
             doc_ref.update({"message_id": str(msg.id)})
 
     async def generate_ai_response(self, prior_context, last_message):
-        """ Calls OpenAI API to generate a response based on the last message with prior context. """
         try:
             client = openai.OpenAI()
             command_info = "The assistant can suggest the following commands when relevant:\n" + "\n".join(
@@ -202,16 +209,16 @@ class AIAssistant(commands.Cog):
                         "role": "system",
                         "content": (
                             "You are a helpful support assistant that provides information to customers on how to fix their issues with our products. "
-                            "Your task is to respond ONLY to the most recent message provided below, using the prior conversation history as context to understand the situation. "
-                            "Do not address or reference earlier messages in your response unless they are directly relevant to answering the latest message. "
-                            "When the latest message relates to a specific product, tool, or process, suggest the appropriate Discord command from the list below if applicable. "
-                            "Format your suggestion as: 'You can use the command `/command` to [description].' "
+                            "Respond ONLY to the most recent message provided below. Use the prior conversation history solely as background context to understand the situation, "
+                            "but do NOT mention or address earlier messages in your response unless the latest message explicitly asks about them. "
+                            "Focus entirely on answering the latest message. If it relates to a specific product, tool, or process, suggest the appropriate Discord command "
+                            "from the list below if applicable, formatted as: 'You can use the command `/command` to [description].' "
                             f"Available commands:\n{command_info}"
                         )
                     },
                     {
                         "role": "user",
-                        "content": f"Prior conversation context:\n{prior_context}\n\nLatest message:\n{last_message}"
+                        "content": f"Prior conversation context (for understanding only, do not reference unless explicitly asked):\n{prior_context}\n\nLatest message (respond to this):\n{last_message}"
                     }
                 ]
             )
