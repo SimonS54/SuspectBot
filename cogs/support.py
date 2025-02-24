@@ -7,287 +7,344 @@ class Support(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    # Command to show the support tool.
-    @app_commands.command(name="supporttool", description="Shows the support tool.")
+    @app_commands.command(name="supporttool", description="Get our Support Tool to troubleshoot issues quickly")
     async def support_tool(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
         if any(role_id in ALLOWED_ROLE_IDS + VERIFIED_CUSTOMER_ROLE_ID for role_id in user_roles):
             embed = discord.Embed(
-                title="Support Tool",
-                description="To save our staff time and frustration, please take five minutes to download our SupportTool and make sure there are no red options. Then, try starting/injecting the product again. If it still doesn't work, please wait for a staff member to help.\n\n"
-                            "Download and ensure all settings are **Green**: [Support Tool](https://mega.nz/file/ioJQ3TAK#khDxBBZ0_LiX__6zEnfr2N6PG1_HDuv271J5rFus7yQ)",
+                title="🔧 Support Tool Assistant",
+                description="Save time and solve issues faster with our automated Support Tool! Follow these quick steps:",
                 color=discord.Color.red()
             )
-            embed.set_footer(text="Powered by SuspectServices")
+            embed.add_field(
+                name="📋 Instructions",
+                value="- Download the tool below\n- Run it and check for any **red** flags\n- Ensure all options show **green**\n- Retry your product\n- Still stuck? Our staff is here to help!",
+                inline=False
+            )
+            embed.add_field(
+                name="⬇️ Download",
+                value="[Support Tool](https://mega.nz/file/ioJQ3TAK#khDxBBZ0_LiX__6zEnfr2N6PG1_HDuv271J5rFus7yQ)",
+                inline=False
+            )
+            embed.set_footer(text="Powered by SuspectServices • Support Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
         else:
-            await interaction.response.send_message("❌ You do not have permission to use this command.")
+            embed = discord.Embed(
+                title="❌ Access Denied",
+                description="You don’t have permission to use this command.",
+                color=discord.Color.red()
+            )
+            embed.set_footer(text="Powered by SuspectServices • Support Section", icon_url=self.bot.user.avatar.url)
+            await interaction.response.send_message(embed=embed)
 
-    # Command to show AnyDesk instructions.
-    @app_commands.command(name="anydesk", description="Instructions for using AnyDesk for remote support.")
+    @app_commands.command(name="anydesk", description="Set up AnyDesk for remote support assistance")
     async def anydesk(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
         if any(role_id in ALLOWED_ROLE_IDS for role_id in user_roles):
             embed = discord.Embed(
-                title="AnyDesk",
-                description="It often takes less time to fix specific Issues if support can remotely connect to your Pc and install your Product for you. This can be especially useful for new Users.\n\n"
-                            "Please download AnyDesk: [AnyDesk](https://anydesk.com/en-gb)\n"
-                            "Once installed, provide your **access code**.",
+                title="🖥️ Remote Support with AnyDesk",
+                description="Let our team fix your issue directly through remote access - perfect for quick resolutions!",
                 color=discord.Color.red()
             )
-            embed.set_footer(text="Powered by SuspectServices")
+            embed.add_field(
+                name="🚀 How It Works",
+                value="- Download AnyDesk below\n- Install it on your PC\n- Share your **access code** with staff\n- Sit back while we assist you",
+                inline=False
+            )
+            embed.add_field(
+                name="⬇️ Get AnyDesk",
+                value="[Download AnyDesk](https://anydesk.com/en-gb)",
+                inline=False
+            )
+            embed.set_footer(text="Powered by SuspectServices • Support Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
         else:
-            await interaction.response.send_message("❌ You do not have permission to use this command.")
+            embed = discord.Embed(
+                title="❌ Access Denied",
+                description="You don’t have permission to use this command.",
+                color=discord.Color.red()
+            )
+            embed.set_footer(text="Powered by SuspectServices • Support Section", icon_url=self.bot.user.avatar.url)
+            await interaction.response.send_message(embed=embed)
 
-    # Virtualization Command with Interactive Buttons
-    @app_commands.command(name="virtualization", description="Instructions for enabling/disabling Virtualization.")
+    @app_commands.command(name="virtualization", description="Guide to enable/disable Virtualization")
     async def virtualization(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
         if not any(role_id in ALLOWED_ROLE_IDS + VERIFIED_CUSTOMER_ROLE_ID for role_id in user_roles):
-            return await interaction.response.send_message("❌ You do not have permission to use this command.")
+            embed = discord.Embed(
+                title="❌ Access Denied",
+                description="You don’t have permission to use this command.",
+                color=discord.Color.red()
+            )
+            embed.set_footer(text="Powered by SuspectServices • Support Section", icon_url=self.bot.user.avatar.url)
+            return await interaction.response.send_message(embed=embed)
 
         embed = discord.Embed(
-            title="Virtualization Guide",
-            description="Your product or assisting staff member might tell you disable virtualization. Follow these steps below to enable or disable virtualization on your system. Choose your CPU type to continue.",
+            title="🖥️ Virtualization Setup Guide",
+            description="Need to toggle Virtualization? Select your CPU type below to get started!",
             color=discord.Color.red()
         )
-        embed.set_footer(text="Powered by SuspectServices")
+        embed.set_footer(text="Powered by SuspectServices • Support Section", icon_url=self.bot.user.avatar.url)
 
-        # Initial CPU Selection View
         class CPUSelectView(discord.ui.View):
             def __init__(self):
                 super().__init__(timeout=60)
 
-            @discord.ui.button(label="AMD", style=discord.ButtonStyle.red)
+            @discord.ui.button(label="AMD", style=discord.ButtonStyle.red, emoji="🔴")
             async def amd_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-                embed.description = "You selected **AMD**. Now, choose your motherboard brand. If your specifc brand is not listed, please ask for help."
+                embed.description = "You chose **AMD**! Pick your motherboard brand below:"
                 await interaction.response.edit_message(embed=embed, view=AMDView())
 
-            @discord.ui.button(label="Intel", style=discord.ButtonStyle.blurple)
+            @discord.ui.button(label="Intel", style=discord.ButtonStyle.red, emoji="🔵")
             async def intel_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-                embed.description = "You selected **Intel**. Now, choose your motherboard brand. If your specifc brand is not listed, please ask for help."
+                embed.description = "You chose **Intel**! Pick your motherboard brand below:"
                 await interaction.response.edit_message(embed=embed, view=IntelView())
 
-        # AMD Motherboard Selection View
         class AMDView(discord.ui.View):
             def __init__(self):
                 super().__init__(timeout=60)
 
-            @discord.ui.button(label="ASUS", style=discord.ButtonStyle.gray)
+            @discord.ui.button(label="ASUS", style=discord.ButtonStyle.red)
             async def asus_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-                embed.description = "Enable/Disable Virtualization on ASUS (AMD): [Guide](https://www.youtube.com/watch?v=cnSgkEK8CWw)\n\n Please note that the BIOS layout may vary. In the case of you not being able to find the option, please ask for guidance."
+                embed.description = "🔧 **ASUS (AMD)** Virtualization Guide: [Watch Tutorial](https://www.youtube.com/watch?v=cnSgkEK8CWw)\n\n*Note: BIOS layouts may differ - ask for help if needed!*"
                 await interaction.response.edit_message(embed=embed, view=None)
 
-            @discord.ui.button(label="MSI", style=discord.ButtonStyle.gray)
+            @discord.ui.button(label="MSI", style=discord.ButtonStyle.red)
             async def msi_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-                embed.description = "Enable/Disable Virtualization on MSI (AMD): [Guide](https://www.youtube.com/watch?v=vyjWTXQW9x8)\n\n Please note that the BIOS layout may vary. In the case of you not being able to find the option, please ask for guidance."
+                embed.description = "🔧 **MSI (AMD)** Virtualization Guide: [Watch Tutorial](https://www.youtube.com/watch?v=vyjWTXQW9x8)\n\n*Note: BIOS layouts may differ - ask for help if needed!*"
                 await interaction.response.edit_message(embed=embed, view=None)
 
-            @discord.ui.button(label="Gigabyte", style=discord.ButtonStyle.gray)
+            @discord.ui.button(label="Gigabyte", style=discord.ButtonStyle.red)
             async def gigabyte_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-                embed.description = "Enable/Disable Virtualization on Gigabyte (AMD): [Guide](https://www.youtube.com/watch?v=dpKGbtWl9Mo)\n\n Please note that the BIOS layout may vary. In the case of you not being able to find the option, please ask for guidance."
+                embed.description = "🔧 **Gigabyte (AMD)** Virtualization Guide: [Watch Tutorial](https://www.youtube.com/watch?v=dpKGbtWl9Mo)\n\n*Note: BIOS layouts may differ - ask for help if needed!*"
                 await interaction.response.edit_message(embed=embed, view=None)
 
-        # Intel Motherboard Selection View
         class IntelView(discord.ui.View):
             def __init__(self):
                 super().__init__(timeout=60)
 
-            @discord.ui.button(label="ASUS", style=discord.ButtonStyle.gray)
+            @discord.ui.button(label="ASUS", style=discord.ButtonStyle.red)
             async def asus_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-                embed.description = "Enable/Disable Virtualization on ASUS (Intel): [Guide](https://www.youtube.com/watch?v=bQDVvhtBeO4)\n\n Please note that the BIOS layout may vary. In the case of you not being able to find the option, please ask for guidance."
+                embed.description = "🔧 **ASUS (Intel)** Virtualization Guide: [Watch Tutorial](https://www.youtube.com/watch?v=bQDVvhtBeO4)\n\n*Note: BIOS layouts may differ - ask for help if needed!*"
                 await interaction.response.edit_message(embed=embed, view=None)
 
-            @discord.ui.button(label="MSI", style=discord.ButtonStyle.gray)
+            @discord.ui.button(label="MSI", style=discord.ButtonStyle.red)
             async def msi_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-                embed.description = "Enable/Disable Virtualization on MSI (Intel): [Guide](https://www.youtube.com/watch?v=9xj-pO2822w)\n\n Please note that the BIOS layout may vary. In the case of you not being able to find the option, please ask for guidance."
+                embed.description = "🔧 **MSI (Intel)** Virtualization Guide: [Watch Tutorial](https://www.youtube.com/watch?v=9xj-pO2822w)\n\n*Note: BIOS layouts may differ - ask for help if needed!*"
                 await interaction.response.edit_message(embed=embed, view=None)
 
-            @discord.ui.button(label="Gigabyte", style=discord.ButtonStyle.gray)
+            @discord.ui.button(label="Gigabyte", style=discord.ButtonStyle.red)
             async def gigabyte_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-                embed.description = "Enable/Disable Virtualization on Gigabyte (Intel): [Guide](https://www.youtube.com/watch?v=cLouTP0kM2I)\n\n Please note that the BIOS layout may vary. In the case of you not being able to find the option, please ask for guidance."
+                embed.description = "🔧 **Gigabyte (Intel)** Virtualization Guide: [Watch Tutorial](https://www.youtube.com/watch?v=cLouTP0kM2I)\n\n*Note: BIOS layouts may differ - ask for help if needed!*"
                 await interaction.response.edit_message(embed=embed, view=None)
 
-        # Send initial CPU selection message
         await interaction.response.send_message(embed=embed, view=CPUSelectView())
 
-    # TPM Command with Interactive Buttons
-    @app_commands.command(name="tpm", description="Instructions for enabling/disabling TPM.")
+    @app_commands.command(name="tpm", description="Guide to enable/disable TPM")
     async def tpm(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
         if not any(role_id in ALLOWED_ROLE_IDS + VERIFIED_CUSTOMER_ROLE_ID for role_id in user_roles):
-            return await interaction.response.send_message("❌ You do not have permission to use this command.")
+            embed = discord.Embed(
+                title="❌ Access Denied",
+                description="You don’t have permission to use this command.",
+                color=discord.Color.red()
+            )
+            embed.set_footer(text="Powered by SuspectServices • Support Section", icon_url=self.bot.user.avatar.url)
+            return await interaction.response.send_message(embed=embed)
 
         embed = discord.Embed(
-            title="TPM Guide",
-            description="Your product or assisting staff member might ask you to enable/disable TPM. Follow these steps below to enable or disable TPM on your system. Choose your CPU type to continue.",
+            title="🔒 TPM Configuration Guide",
+            description="Adjust your TPM settings easily - select your CPU type to begin!",
             color=discord.Color.red()
         )
-        embed.set_footer(text="Powered by SuspectServices")
+        embed.set_footer(text="Powered by SuspectServices • Support Section", icon_url=self.bot.user.avatar.url)
 
-        # Initial CPU Selection View
         class CPUSelectView(discord.ui.View):
             def __init__(self):
                 super().__init__(timeout=60)
 
-            @discord.ui.button(label="AMD", style=discord.ButtonStyle.red)
+            @discord.ui.button(label="AMD", style=discord.ButtonStyle.red, emoji="🔴")
             async def amd_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-                embed.description = "You selected **AMD**. Now, choose your motherboard brand. If your specifc brand is not listed, please ask for help."
+                embed.description = "You chose **AMD**! Pick your motherboard brand below:"
                 await interaction.response.edit_message(embed=embed, view=AMDView())
 
-            @discord.ui.button(label="Intel", style=discord.ButtonStyle.blurple)
+            @discord.ui.button(label="Intel", style=discord.ButtonStyle.red, emoji="🔵")
             async def intel_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-                embed.description = "You selected **Intel**. Now, choose your motherboard brand. If your specifc brand is not listed, please ask for help."
+                embed.description = "You chose **Intel**! Pick your motherboard brand below:"
                 await interaction.response.edit_message(embed=embed, view=IntelView())
 
-        # AMD Motherboard Selection View
         class AMDView(discord.ui.View):
             def __init__(self):
                 super().__init__(timeout=60)
 
-            @discord.ui.button(label="ASUS", style=discord.ButtonStyle.gray)
+            @discord.ui.button(label="ASUS", style=discord.ButtonStyle.red)
             async def asus_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-                embed.description = "Enable/Disable TPM on ASUS (AMD): [Guide](https://www.youtube.com/watch?v=3qbU8T7MSxM)\n\n Please note that the BIOS layout may vary. In the case of you not being able to find the option, please ask for guidance."
+                embed.description = "🔧 **ASUS (AMD)** TPM Guide: [Watch Tutorial](https://www.youtube.com/watch?v=3qbU8T7MSxM)\n\n*Note: BIOS layouts may differ - ask for help if needed!*"
                 await interaction.response.edit_message(embed=embed, view=None)
 
-            @discord.ui.button(label="MSI", style=discord.ButtonStyle.gray)
+            @discord.ui.button(label="MSI", style=discord.ButtonStyle.red)
             async def msi_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-                embed.description = "Enable/Disable TPM on MSI (AMD): [Guide](https://www.youtube.com/watch?v=iTDuya1HYz4)\n\n Please note that the BIOS layout may vary. In the case of you not being able to find the option, please ask for guidance."
+                embed.description = "🔧 **MSI (AMD)** TPM Guide: [Watch Tutorial](https://www.youtube.com/watch?v=iTDuya1HYz4)\n\n*Note: BIOS layouts may differ - ask for help if needed!*"
                 await interaction.response.edit_message(embed=embed, view=None)
 
-            @discord.ui.button(label="Gigabyte", style=discord.ButtonStyle.gray)
+            @discord.ui.button(label="Gigabyte", style=discord.ButtonStyle.red)
             async def gigabyte_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-                embed.description = "Enable/Disable TPM on Gigabyte (AMD): [Guide](https://www.youtube.com/watch?v=DEnB9g4mCOQ)\n\n Please note that the BIOS layout may vary. In the case of you not being able to find the option, please ask for guidance."
+                embed.description = "🔧 **Gigabyte (AMD)** TPM Guide: [Watch Tutorial](https://www.youtube.com/watch?v=DEnB9g4mCOQ)\n\n*Note: BIOS layouts may differ - ask for help if needed!*"
                 await interaction.response.edit_message(embed=embed, view=None)
 
-        # Intel Motherboard Selection View
         class IntelView(discord.ui.View):
             def __init__(self):
                 super().__init__(timeout=60)
 
-            @discord.ui.button(label="ASUS", style=discord.ButtonStyle.gray)
+            @discord.ui.button(label="ASUS", style=discord.ButtonStyle.red)
             async def asus_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-                embed.description = "Enable/Disable TPM on ASUS (Intel): [Guide](https://www.youtube.com/watch?v=0rFrgPT1O9s)\n\n Please note that the BIOS layout may vary. In the case of you not being able to find the option, please ask for guidance."
+                embed.description = "🔧 **ASUS (Intel)** TPM Guide: [Watch Tutorial](https://www.youtube.com/watch?v=0rFrgPT1O9s)\n\n*Note: BIOS layouts may differ - ask for help if needed!*"
                 await interaction.response.edit_message(embed=embed, view=None)
 
-            @discord.ui.button(label="MSI", style=discord.ButtonStyle.gray)
+            @discord.ui.button(label="MSI", style=discord.ButtonStyle.red)
             async def msi_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-                embed.description = "Enable/Disable TPM on MSI (Intel): [Guide](https://www.youtube.com/watch?v=8cc0QVDqcmc)\n\n Please note that the BIOS layout may vary. In the case of you not being able to find the option, please ask for guidance."
+                embed.description = "🔧 **MSI (Intel)** TPM Guide: [Watch Tutorial](https://www.youtube.com/watch?v=8cc0QVDqcmc)\n\n*Note: BIOS layouts may differ - ask for help if needed!*"
                 await interaction.response.edit_message(embed=embed, view=None)
 
-            @discord.ui.button(label="Gigabyte", style=discord.ButtonStyle.gray)
+            @discord.ui.button(label="Gigabyte", style=discord.ButtonStyle.red)
             async def gigabyte_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-                embed.description = "Enable/Disable TPM on Gigabyte (Intel): [Guide](https://www.youtube.com/watch?v=_FQvLX9GPQw)\n\n Please note that the BIOS layout may vary. In the case of you not being able to find the option, please ask for guidance."
+                embed.description = "🔧 **Gigabyte (Intel)** TPM Guide: [Watch Tutorial](https://www.youtube.com/watch?v=_FQvLX9GPQw)\n\n*Note: BIOS layouts may differ - ask for help if needed!*"
                 await interaction.response.edit_message(embed=embed, view=None)
 
-        # Send initial CPU selection message
         await interaction.response.send_message(embed=embed, view=CPUSelectView())
 
-    # Virtualization Command with Interactive Buttons
-    @app_commands.command(name="secureboot", description="Instructions for enabling/disabling Secure Boot.")
+    @app_commands.command(name="secureboot", description="Guide to enable/disable Secure Boot")
     async def secureboot(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
         if not any(role_id in ALLOWED_ROLE_IDS + VERIFIED_CUSTOMER_ROLE_ID for role_id in user_roles):
-            return await interaction.response.send_message("❌ You do not have permission to use this command.")
+            embed = discord.Embed(
+                title="❌ Access Denied",
+                description="You don’t have permission to use this command.",
+                color=discord.Color.red()
+            )
+            embed.set_footer(text="Powered by SuspectServices • Support Section", icon_url=self.bot.user.avatar.url)
+            return await interaction.response.send_message(embed=embed)
 
         embed = discord.Embed(
-            title="Secure Boot Guide",
-            description="Your product or assisting staff member might ask you to enable/disable Secure Boot. Follow these steps below to enable or disable Secure Boot on your system. Choose your CPU type to continue.",
+            title="🔐 Secure Boot Configuration",
+            description="Toggle Secure Boot with ease - choose your CPU type to proceed!",
             color=discord.Color.red()
         )
-        embed.set_footer(text="Powered by SuspectServices")
+        embed.set_footer(text="Powered by SuspectServices • Support Section", icon_url=self.bot.user.avatar.url)
 
-        # Initial CPU Selection View
         class CPUSelectView(discord.ui.View):
             def __init__(self):
                 super().__init__(timeout=60)
 
-            @discord.ui.button(label="AMD", style=discord.ButtonStyle.red)
+            @discord.ui.button(label="AMD", style=discord.ButtonStyle.red, emoji="🔴")
             async def amd_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-                embed.description = "You selected **AMD**. Now, choose your motherboard brand. If your specifc brand is not listed, please ask for help."
+                embed.description = "You chose **AMD**! Pick your motherboard brand below:"
                 await interaction.response.edit_message(embed=embed, view=AMDView())
 
-            @discord.ui.button(label="Intel", style=discord.ButtonStyle.blurple)
+            @discord.ui.button(label="Intel", style=discord.ButtonStyle.red, emoji="🔵")
             async def intel_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-                embed.description = "You selected **Intel**. Now, choose your motherboard brand. If your specifc brand is not listed, please ask for help."
+                embed.description = "You chose **Intel**! Pick your motherboard brand below:"
                 await interaction.response.edit_message(embed=embed, view=IntelView())
 
-        # AMD Motherboard Selection View
         class AMDView(discord.ui.View):
             def __init__(self):
                 super().__init__(timeout=60)
 
-            @discord.ui.button(label="ASUS", style=discord.ButtonStyle.gray)
+            @discord.ui.button(label="ASUS", style=discord.ButtonStyle.red)
             async def asus_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-                embed.description = "Enable/Disable Secure Boot on ASUS (AMD): [Guide](https://www.youtube.com/watch?v=RSBbfLGRWN0&t=78s)\n\n Please note that the BIOS layout may vary. In the case of you not being able to find the option, please ask for guidance."
+                embed.description = "🔧 **ASUS (AMD)** Secure Boot Guide: [Watch Tutorial](https://www.youtube.com/watch?v=RSBbfLGRWN0&t=78s)\n\n*Note: BIOS layouts may differ - ask for help if needed!*"
                 await interaction.response.edit_message(embed=embed, view=None)
 
-            @discord.ui.button(label="MSI", style=discord.ButtonStyle.gray)
+            @discord.ui.button(label="MSI", style=discord.ButtonStyle.red)
             async def msi_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-                embed.description = "Enable/Disable Secure Boot on MSI (AMD): [Guide](https://www.youtube.com/watch?v=PPm4NbnAMLQ)\n\n Please note that the BIOS layout may vary. In the case of you not being able to find the option, please ask for guidance."
+                embed.description = "🔧 **MSI (AMD)** Secure Boot Guide: [Watch Tutorial](https://www.youtube.com/watch?v=PPm4NbnAMLQ)\n\n*Note: BIOS layouts may differ - ask for help if needed!*"
                 await interaction.response.edit_message(embed=embed, view=None)
 
-            @discord.ui.button(label="Gigabyte", style=discord.ButtonStyle.gray)
+            @discord.ui.button(label="Gigabyte", style=discord.ButtonStyle.red)
             async def gigabyte_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-                embed.description = "Enable/Disable Secure Boot on Gigabyte (AMD): [Guide](https://www.youtube.com/watch?v=lswRu0U1X9w)\n\n Please note that the BIOS layout may vary. In the case of you not being able to find the option, please ask for guidance."
+                embed.description = "🔧 **Gigabyte (AMD)** Secure Boot Guide: [Watch Tutorial](https://www.youtube.com/watch?v=lswRu0U1X9w)\n\n*Note: BIOS layouts may differ - ask for help if needed!*"
                 await interaction.response.edit_message(embed=embed, view=None)
 
-        # Intel Motherboard Selection View
         class IntelView(discord.ui.View):
             def __init__(self):
                 super().__init__(timeout=60)
 
-            @discord.ui.button(label="ASUS", style=discord.ButtonStyle.gray)
+            @discord.ui.button(label="ASUS", style=discord.ButtonStyle.red)
             async def asus_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-                embed.description = "Enable/Disable Secure Boot on ASUS (Intel): [Guide](https://www.youtube.com/watch?v=CbgX_Ek76XA)\n\n Please note that the BIOS layout may vary. In the case of you not being able to find the option, please ask for guidance."
+                embed.description = "🔧 **ASUS (Intel)** Secure Boot Guide: [Watch Tutorial](https://www.youtube.com/watch?v=CbgX_Ek76XA)\n\n*Note: BIOS layouts may differ - ask for help if needed!*"
                 await interaction.response.edit_message(embed=embed, view=None)
 
-            @discord.ui.button(label="MSI", style=discord.ButtonStyle.gray)
+            @discord.ui.button(label="MSI", style=discord.ButtonStyle.red)
             async def msi_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-                embed.description = "Enable/Disable Secure Boot on MSI (Intel): [Guide](https://www.youtube.com/watch?v=XaJ-qNqzDIM)\n\n Please note that the BIOS layout may vary. In the case of you not being able to find the option, please ask for guidance."
+                embed.description = "🔧 **MSI (Intel)** Secure Boot Guide: [Watch Tutorial](https://www.youtube.com/watch?v=XaJ-qNqzDIM)\n\n*Note: BIOS layouts may differ - ask for help if needed!*"
                 await interaction.response.edit_message(embed=embed, view=None)
 
-            @discord.ui.button(label="Gigabyte", style=discord.ButtonStyle.gray)
+            @discord.ui.button(label="Gigabyte", style=discord.ButtonStyle.red)
             async def gigabyte_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-                embed.description = "Enable/Disable Secure Boot on Gigabyte (Intel): [Guide](https://www.youtube.com/watch?v=63t2TYHmBgc)\n\n Please note that the BIOS layout may vary. In the case of you not being able to find the option, please ask for guidance."
+                embed.description = "🔧 **Gigabyte (Intel)** Secure Boot Guide: [Watch Tutorial](https://www.youtube.com/watch?v=63t2TYHmBgc)\n\n*Note: BIOS layouts may differ - ask for help if needed!*"
                 await interaction.response.edit_message(embed=embed, view=None)
 
-        # Send initial CPU selection message
         await interaction.response.send_message(embed=embed, view=CPUSelectView())
 
-    # Command to show instructions for enabling/disabling Core Isolation.
-    @app_commands.command(name="coreisolation", description="Shows instructions to disable Core Isolation.")
+    @app_commands.command(name="coreisolation", description="Disable Core Isolation for compatibility")
     async def coreisolation(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
         if any(role_id in ALLOWED_ROLE_IDS + VERIFIED_CUSTOMER_ROLE_ID for role_id in user_roles):
             embed = discord.Embed(
-                title="Core Isolation",
-                description="Core Isolation is a security feature that can cause issues with our products. If a support member or the products prompt you to turn it of, follow the guide below to disable it.\n\n"
-                            "Disable Core Isolation: [Guide](https://www.youtube.com/watch?v=AEjt7daC60g)",
+                title="🛡️ Core Isolation Fix",
+                description="Core Isolation can interfere with some products. Disable it quickly with this guide!",
                 color=discord.Color.red()
             )
-            embed.set_footer(text="Powered by SuspectServices")
+            embed.add_field(
+                name="📖 Tutorial",
+                value="[Disable Core Isolation](https://www.youtube.com/watch?v=AEjt7daC60g)",
+                inline=False
+            )
+            embed.add_field(
+                name="ℹ️ Why?",
+                value="This security feature might block certain product functions - turn it off if prompted!",
+                inline=False
+            )
+            embed.set_footer(text="Powered by SuspectServices • Support Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
         else:
-            await interaction.response.send_message("❌ You do not have permission to use this command.")
+            embed = discord.Embed(
+                title="❌ Access Denied",
+                description="You don’t have permission to use this command.",
+                color=discord.Color.red()
+            )
+            embed.set_footer(text="Powered by SuspectServices • Support Section", icon_url=self.bot.user.avatar.url)
+            await interaction.response.send_message(embed=embed)
 
-    # Command to show instructions for installing the Visual C++ redistributables.
-    @app_commands.command(name="vc64", description="Instructions for installing the Visual C++ redistributables.")
+    @app_commands.command(name="vc64", description="Install Visual C++ and DirectX dependencies")
     async def vc64(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
         if any(role_id in ALLOWED_ROLE_IDS + VERIFIED_CUSTOMER_ROLE_ID for role_id in user_roles):
             embed = discord.Embed(
-                title="Visual C++ Redistributables",
-                description="Some of our products may need both C++ redistributables and directx to be installed on your computer to work as expected. Usually these installations already are installed by you downloading different games or from other sources. If that is not the case, please download them via the links below.\n\n"
-                            "Download Visual C++ redistributables: [Download](https://aka.ms/vs/17/release/vc_redist.x64.exe)\n"
-                            "Download DirectX: [Download](https://www.microsoft.com/en-us/download/details.aspx?id=35)",
+                title="📦 Dependency Installer",
+                description="Ensure product compatibility by installing these essential components!",
                 color=discord.Color.red()
             )
-            embed.set_footer(text="Powered by SuspectServices")
+            embed.add_field(
+                name="⬇️ Downloads",
+                value="- [Visual C++ Redistributables](https://aka.ms/vs/17/release/vc_redist.x64.exe)\n- [DirectX Runtime](https://www.microsoft.com/en-us/download/details.aspx?id=35)",
+                inline=False
+            )
+            embed.add_field(
+                name="ℹ️ Important",
+                value="These are often pre-installed by games, but install them here if asked for!",
+                inline=False
+            )
+            embed.set_footer(text="Powered by SuspectServices • Support Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
         else:
-            await interaction.response.send_message("❌ You do not have permission to use this command.")
+            embed = discord.Embed(
+                title="❌ Access Denied",
+                description="You don’t have permission to use this command.",
+                color=discord.Color.red()
+            )
+            embed.set_footer(text="Powered by SuspectServices • Support Section", icon_url=self.bot.user.avatar.url)
+            await interaction.response.send_message(embed=embed)
 
 async def setup(bot):
     await bot.add_cog(Support(bot))

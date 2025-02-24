@@ -7,51 +7,11 @@ from firebase_config import db
 from firebase_admin import firestore
 from config import CATEGORY_IDS, AI_REVIEW_CHANNEL_ID
 import datetime
+import asyncio
 
 # Load environment variables
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
-
-# Define Discord commands for the AI to reference
-COMMAND_LIST = {
-    "/apexlite": "Get Guide for Apex Lite",
-    "/apexkernaim": "Get Guide for Apex Kernaim",
-    "/codkernaim": "Get Guide for COD Kernaim",
-    "/codrutunlock": "Get Guide for COD RUT Unlock",
-    "/codrutuav": "Get Guide for COD RUT UAV",
-    "/eftexoarena": "Get Guide for EFT Exo Arena",
-    "/eftexo": "Get Guide for EFT Exo",
-    "/eftnextfull": "Get Guide for EFT Nextcheat Full",
-    "/eftnextlite": "Get Guide for EFT Nextcheat Lite",
-    "/fivemhx": "Get Guide for FiveM HX",
-    "/fivemtzext": "Get Guide for FiveM TZ External",
-    "/fivemtzint": "Get Guide for FiveM TZ Internal",
-    "/fndcext": "Get Guide for FN Disconnect External",
-    "/hwidexception": "Get Guide for Exception Spoofer",
-    "/marvelklar": "Get Guide for Marvel Rivals Klar",
-    "/r6ring": "Get Guide for R6 Ring1",
-    "/rustfluent": "Get Guide for Rust Fluent",
-    "/rustmatrix": "Get Guide for Rust Matrix",
-    "/rustdcext": "Get Guide for Rust Disconnect External",
-    "/rustrecoil": "Get Guide for Rust Recoil Script",
-    "/supporttool": "Get the support tool",
-    "/anydesk": "Get the AnyDesk tool",
-    "/virtualization": "Get the Virtualization Guide",
-    "/tpm": "Get the TPM Guide",
-    "/secureboot": "Get the Secure Boot Guide",
-    "/coreisolation": "Get the Core Isolation Guide",
-    "/vc64": "Get the Visual C++ redistributables",
-    "/epvp": "Get Elitepvpers vouch list",
-    "/epvptrade": "Get Instructions for a trade review",
-    "/dat": "Payment instructions for Dat",
-    "/paradox": "Payment instructions for Paradox",
-    "/announce": "Send an announcement",
-    "/update": "Send an update",
-    "/productupdate": "Update a product status",
-    "/review": "Leave a review",
-    "/bothelp": "Shows this list",
-    "/stats": "Retrieve ticket stats of the support team"
-}
 
 MAX_TICKETS = 250
 
@@ -59,6 +19,7 @@ class AIAssistant(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.active_tickets = {}
+        self.assistant_id = "asst_kMPncHzly9M28mIQtCLe102e"  # Replace with your Assistant ID
 
     async def cog_load(self):
         print("Initializing AIAssistant with existing tickets...")
@@ -73,9 +34,9 @@ class AIAssistant(commands.Cog):
     async def enforce_ticket_limit(self):
         """ Ensure the tickets collection stays under MAX_TICKETS by removing the oldest ones based on created_at. """
         tickets_ref = db.collection("tickets")
-        tickets = list(tickets_ref.order_by("created_at").stream())  # Order by creation timestamp
+        tickets = list(tickets_ref.order_by("created_at").stream())
         if len(tickets) > MAX_TICKETS:
-            tickets_to_remove = tickets[:len(tickets) - MAX_TICKETS]  # Keep the newest 250
+            tickets_to_remove = tickets[:len(tickets) - MAX_TICKETS]
             for ticket in tickets_to_remove:
                 ticket_id = ticket.id
                 ticket.reference.delete()
@@ -108,10 +69,9 @@ class AIAssistant(commands.Cog):
             })
             doc_ref.update({"messages": ticket_data["messages"]})
         else:
-            # New ticket detected, add created_at field
             doc_ref.set({
                 "ticket_id": ticket_id,
-                "created_at": datetime.datetime.utcnow(),  # Add creation timestamp
+                "created_at": datetime.datetime.utcnow(),
                 "messages": [{
                     "user_id": user_id,
                     "content": message.content,
@@ -153,11 +113,23 @@ class AIAssistant(commands.Cog):
             print(f"✅ Approving AI response for ticket {ticket_id}")
             approved_ref = db.collection("approved_responses").document(ticket_id)
             approved_ref.set({"responses": firestore.ArrayUnion([ai_response])}, merge=True)
-            await reaction.message.channel.send(f"{user.mention} ✅ AI response approved and saved for future learning!", delete_after=5)
+            embed = discord.Embed(
+                title="✅ AI Response Approved",
+                description=f"{user.mention}, the AI suggestion for ticket `{ticket_id}` has been approved and saved for future learning!",
+                color=discord.Color.red()
+            )
+            embed.set_footer(text="Powered by SuspectServices • AI Section", icon_url=self.bot.user.avatar.url)
+            await reaction.message.channel.send(embed=embed, delete_after=5)
         elif reaction.emoji == "👎":
             print(f"❌ Rejecting AI response for ticket {ticket_id}")
             doc_list[0].reference.update({"rejected": True})
-            await reaction.message.channel.send(f"{user.mention} ❌ AI response rejected. The bot will learn from this.", delete_after=5)
+            embed = discord.Embed(
+                title="❌ AI Response Rejected",
+                description=f"{user.mention}, the AI suggestion for ticket `{ticket_id}` has been rejected. The bot will refine its approach.",
+                color=discord.Color.red()
+            )
+            embed.set_footer(text="Powered by SuspectServices • AI Section", icon_url=self.bot.user.avatar.url)
+            await reaction.message.channel.send(embed=embed, delete_after=5)
 
     async def check_for_suggestions(self, channel, ticket_id):
         review_channel = self.bot.get_channel(AI_REVIEW_CHANNEL_ID)
@@ -188,41 +160,51 @@ class AIAssistant(commands.Cog):
 
             embed = discord.Embed(
                 title="🤖 AI Suggestion",
-                description=f"Suggested response for `{channel.name}`:\n\n{ai_response}",
-                color=discord.Color.blue()
+                description=f"For ticket `{channel.name}`:",
+                color=discord.Color.red()
             )
+            embed.add_field(
+                name="📝 Response",
+                value=ai_response,
+                inline=False
+            )
+            embed.set_footer(text="Powered by SuspectServices • AI Section", icon_url=self.bot.user.avatar.url)
             msg = await review_channel.send(embed=embed)
             await msg.add_reaction("👍")
             await msg.add_reaction("👎")
             doc_ref.update({"message_id": str(msg.id)})
+        else:
+            print(f"Skipping irrelevant message for ticket {ticket_id}: '{last_message}'")
 
     async def generate_ai_response(self, prior_context, last_message):
+        """ Calls OpenAI Assistants API with minimal prompt, relying on trained Assistant. """
         try:
             client = openai.OpenAI()
-            command_info = "The assistant can suggest the following commands when relevant:\n" + "\n".join(
-                [f"{cmd}: {desc}" for cmd, desc in COMMAND_LIST.items()]
+            thread = client.beta.threads.create()
+            client.beta.threads.messages.create(
+                thread_id=thread.id,
+                role="user",
+                content=(
+                    f"Prior conversation context (for understanding only, do not reference unless explicitly asked):\n{prior_context}\n\n"
+                    f"Latest message (respond to this):\n{last_message}"
+                )
             )
-            response = client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[
-                    {
-                        "role": "system",
-                        "content": (
-                            "You are a helpful support assistant that provides information to customers on how to fix their issues with our products. "
-                            "Respond ONLY to the most recent message provided below. Use the prior conversation history solely as background context to understand the situation, "
-                            "but do NOT mention or address earlier messages in your response unless the latest message explicitly asks about them. "
-                            "Focus entirely on answering the latest message. If it relates to a specific product, tool, or process, suggest the appropriate Discord command "
-                            "from the list below if applicable, formatted as: 'You can use the command `/command` to [description].' "
-                            f"Available commands:\n{command_info}"
-                        )
-                    },
-                    {
-                        "role": "user",
-                        "content": f"Prior conversation context (for understanding only, do not reference unless explicitly asked):\n{prior_context}\n\nLatest message (respond to this):\n{last_message}"
-                    }
-                ]
+            run = client.beta.threads.runs.create(
+                thread_id=thread.id,
+                assistant_id=self.assistant_id
             )
-            return response.choices[0].message.content
+            while run.status not in ["completed", "failed"]:
+                run = client.beta.threads.runs.retrieve(thread_id=thread.id, run_id=run.id)
+                await asyncio.sleep(0.1)
+            if run.status == "failed":
+                print(f"Assistant run failed: {run.last_error}")
+                return None
+            messages = client.beta.threads.messages.list(thread_id=thread.id)
+            for message in messages.data:
+                if message.role == "assistant":
+                    response = message.content[0].text.value
+                    return response if response.strip() else None
+            return None
         except Exception as e:
             print(f"Error generating AI response: {e}")
             return None
