@@ -1,0 +1,17 @@
+{
+  "guide": "Exception Spoofer Setup Guide",
+  "sections": [
+    {
+      "title": "Setup",
+      "text": "Create an account here: https://exception-cheats.net/auth/signup\n\nDownload our support tool here: https://mega.nz/file/ioJQ3TAK#khDxBBZ0_LiX__6zEnfr2N6PG1_HDuv271J5rFus7yQ\n\nMake everything green in the support tool before downloading the loader!"
+    },
+    {
+      "title": "Instructions",
+      "text": "Video Tutorial: https://youtu.be/_z3O7YM7TTU\n\nBefore downloading, make sure all antivirus’s are disabled on your computer and any 3rd party anticheats such as FACEIT or RIOT VANGUARD are uninstalled"
+    },
+    {
+      "title": "Troubleshooting",
+      "text": "Initialization Failure\nOpen cmd.exe as admin, type the following bcdedit /set hypervisorlaunchtype off, hit enter and restart PC\n\nDisable TPM in bios\nRestart your computer and enter the BIOS setup by pressing the appropriate key during startup. ...\nNavigate to the Security or Advanced tab using the arrow keys.\nLook for the TPM (Trusted Platform Module) option and select it.\nChoose the option to disable (or enable) the TPM.\nSave your changes and exit the BIOS setup.\nRestart your computer."
+    }
+  ]
+}

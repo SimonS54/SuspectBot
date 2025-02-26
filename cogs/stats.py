@@ -20,39 +20,41 @@ class Stats(commands.Cog):
         if not any(role.id in ALLOWED_ROLE_IDS for role in message.author.roles):
             return
 
-        if message.channel.category_id in CATEGORY_IDS:
-            user_id = str(message.author.id)
-            ticket_id = str(message.channel.id)
-            doc_ref = db.collection("user_stats").document(user_id)
-            doc = doc_ref.get()
-            now = datetime.utcnow()
+        if message.channel.category_id not in CATEGORY_IDS:
+            return
 
-            if doc.exists:
-                data = doc.to_dict()
-                handled_tickets = data.get("handled_ticket_ids", set())
+        user_id = str(message.author.id)
+        ticket_id = str(message.channel.id)
+        doc_ref = db.collection("user_stats").document(user_id)
+        doc = doc_ref.get()
+        now = datetime.utcnow()
 
-                if ticket_id in handled_tickets:
-                    return
+        if doc.exists:
+            data = doc.to_dict()
+            handled_tickets = set(data.get("handled_ticket_ids", []))
 
-                handled_tickets.add(ticket_id)
-                doc_ref.update({
-                    "total_tickets": firestore.Increment(1),
-                    "daily_tickets": firestore.Increment(1),
-                    "weekly_tickets": firestore.Increment(1),
-                    "monthly_tickets": firestore.Increment(1),
-                    "handled_ticket_ids": list(handled_tickets),
-                    "last_updated": now
-                })
-            else:
-                doc_ref.set({
-                    "user_id": user_id,
-                    "total_tickets": 1,
-                    "daily_tickets": 1,
-                    "weekly_tickets": 1,
-                    "monthly_tickets": 1,
-                    "handled_ticket_ids": [ticket_id],
-                    "last_updated": now
-                })
+            if ticket_id in handled_tickets:
+                return
+
+            handled_tickets.add(ticket_id)
+            doc_ref.update({
+                "total_tickets": firestore.Increment(1),
+                "daily_tickets": firestore.Increment(1),
+                "weekly_tickets": firestore.Increment(1),
+                "monthly_tickets": firestore.Increment(1),
+                "handled_ticket_ids": list(handled_tickets),
+                "last_updated": now
+            })
+        else:
+            doc_ref.set({
+                "user_id": user_id,
+                "total_tickets": 1,
+                "daily_tickets": 1,
+                "weekly_tickets": 1,
+                "monthly_tickets": 1,
+                "handled_ticket_ids": [ticket_id],
+                "last_updated": now
+            })
 
     async def reset_counters_task(self):
         """Background task to reset daily, weekly, and monthly counters."""
@@ -83,7 +85,6 @@ class Stats(commands.Cog):
                 field_to_reset: 0,
                 "last_updated": datetime.utcnow()
             })
-        print(f"Reset {field_to_reset} for all users.")
 
     @app_commands.command(name="stats", description="View your ticket handling stats or someone else’s")
     async def stats(self, interaction: discord.Interaction, member: discord.Member = None):

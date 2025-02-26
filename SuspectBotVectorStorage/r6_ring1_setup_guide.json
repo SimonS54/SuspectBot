@@ -1,0 +1,17 @@
+{
+  "guide": "Ring 1 R6 Setup Guide",
+  "sections": [
+    {
+      "title": "Setup",
+      "text": "Download the loader here: https://ring-1.io/loader-key\n\nDownload our support tool here: https://mega.nz/file/ioJQ3TAK#khDxBBZ0_LiX__6zEnfr2N6PG1_HDuv271J5rFus7yQ\n\nOpen the client and sign in with your site credentials.\n\nSelect the cheats you want to use. (they will be marked yellow once selected)\n\nThe Spoofer is enabled by default, if you want (not advised), you can disable it in the bottom right corner.\n\nNow you can click on \"Load selected cheats\". If all went well, you will see a green checkmark.\n\nClick the \"Restart now\" button and say YES when asked if you are sure.\n\nYour PC will now reboot. Once logged back into Windows, open the game! (you do not have to run our Client again)\n\nUse the DEL key to open the cheat menu."
+    },
+    {
+      "title": "Troubleshooting",
+      "text": "Sync time and date, and/or use vpn. Change internet type and provider (from wire to wireless and from home internet to mobile internet or the other way arround) restart router, reset network. All this can/may resolve the issue also Theres an option in the bios called “Kernal DMA protection” That needs to be OFF sometimes.\n\nFrom the Bios:\n\n• Drives must be formatted in GPT partitions\n\n• Boot mode has to be in UEFI\n\n• Turn ON and enable Intel Virtualization and all related options like VT-d and VT-x\n\n• Turn OFF secure boot / Delete all bootable keys\n\n• Disable TPM (Optional and if you have windows11)\n\nFrom the Windows:\n• Completely turn OFF any antivirus / firewall / windows defender\n• Open exploit protection and turn every single option there to OFF BY DEFAULT\n• Turn OFF fast boot"
+    },
+    {
+      "title": "Additional Instructions",
+      "text": "Once all the above is set:\n\nDownload the loader from the link\nLogin using your key\nSelect the cheat, if you don't want to use spoofer make sure to turn it OFF (ATTENTION: Spoofer is turned ON by default) then hit LOAD SELECTED CHEATS.\nthe loader will ask to restart your computer, hit RESTART PC\nAfter the computer restarts, run the game directly. No need to inject a second time.\n\nThe cheat menu key is DEL (ATTENTION: the END key next to it will completely close the cheat, if you hit it you have to close the game and start it again, no need to reinject the cheat in this case\n\nIf the cheat doesn't show after a successful injection\nTurn off all overlays ( Discord, steam, geforce experience, msi afterburner et...)\nTry to switch between borderless and full screen (cheat run best in Full screen mode)\nIn some cases, make sure the game is running under DX11 and not DX12\n\nOur products are INTEL cpu only and won't work on AMD CPUs\nMost if not all X/XE and Xeon series CPUs are not supported.\nCheat only works on win10 (Starting from 1909) and on win11 (must have the latest windows update, latest BIOS firmware update, and TPM disabled in some cases) which means some win11 versions may not work, in this case a win10 is a must."
+    }
+  ]
+}

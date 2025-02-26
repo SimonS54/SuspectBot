@@ -1,0 +1,29 @@
+{
+  "guide": "FiveM HX Errors Guide",
+  "sections": [
+    {
+      "title": "Error: steam.exe Popup",
+      "text": "Caused by GeForce Now or Shadow PC—restart your PC and redo injection if not applicable."
+    },
+    {
+      "title": "Error: User Couldn't Be Found",
+      "text": "Verify registration on the HX panel; contact support if issue persists."
+    },
+    {
+      "title": "Error: No User Found with HWID",
+      "text": "Provide your key and user in a ticket and await support."
+    },
+    {
+      "title": "Error: Limit Reached",
+      "text": "Max HWID resets used—wait for support assistance."
+    },
+    {
+      "title": "Error: ntdll.dll",
+      "text": "1. Open FiveM without HX.\n2. Set screentype to Fullscreen.\n3. Delete data, crashes, and logs folders in FiveM Application Data.\n4. Reinject—or contact support if unresolved."
+    },
+    {
+      "title": "Error: Instaban",
+      "text": "1. Change menu key to something discreet.\n2. Disable 'Block Game Input' in config.\n3. Avoid rage/exploit features.\n4. Reinject—or contact support if unresolved."
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "guide": "EFT NextCheat Full Errors Guide",
+  "sections": [
+    {
+      "title": "Error: Cannot Start Driver",
+      "text": "Disable Secure Boot in your BIOS settings and ensure no anticheat or antivirus is running."
+    }
+  ]
+}

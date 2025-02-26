@@ -1,0 +1,41 @@
+{
+  "guide": "NextCheat Setup Guide",
+  "sections": [
+    {
+      "title": "Getting Started Guide",
+      "text": "📢 Getting Started Guide 📢\n\nStep 1: Retrieve Your Product Key 🔑\nAfter purchasing the cheat, you should have received a product key. Copy this key or keep it accessible for the next step.\n\nStep 2: Download the Loader 💾\nNavigate to loadergen.com/download.\nClick \"Download,\" and the loader will be saved to your downloads folder.\nLocate the downloaded file, right-click, and select \"Show in Folder.\"\nRight-click the loader and select \"Run as Administrator.\"\n\nStep 3: Register 🚀\nOpen the loader.\nClick on the \"Sign Up\" tab.\nFill in the registration form with your details, including username, email, password, and the product key you received.\nMake sure to remember your login details as you will need them to access the loader.\nClick \"Register.\" You should see a confirmation message indicating successful registration.\n\nStep 4: Using the Loader 🧭\nProducts Tab: This is where the cheat you purchased will appear.\nRedeem License Key: Input new license keys here if you decide to resubscribe after your current one expires.\nRisk Status: Check the risk status of the game here.\nChange Log: View logs of updates and changes made by the development team.\nInjection Tab:\nPress \"Load\" to inject the cheat into your PC.\nEnsure you inject the cheat before launching the game.\nSettings:\nHere, you can install the game spoofer and access other settings.\nMake sure the game launcher is offline before installing the spoofer.\n\nSupport 🛠️\nFor any questions or assistance, please reach out to the support team in the provided Discord server."
+    },
+    {
+      "title": "How to Disable Windows Defender",
+      "text": "Windows Defender provides essential protection, but sometimes you might need to disable it, especially for certain programs. Cheats can cause false-positives because essentially avoiding antiviruses have some similarities with avoiding anticheats. Here are two methods:\nManually Disabling Windows Defender:\n\nStep 1: Open Start menu, type Windows Security, press Enter.\n\nStep 2: Go to Virus & threat protection > Manage settings.\n\nStep 3: Turn off Real-time protection. (Windows might turn it back on automatically.)\n\nUsing DefenderControl:\nDefenderControl lets you disable Windows Defender with ease.\n\nStep 1: Download DefenderControl from a reputable source. - https://www.sordum.org/files/downloads.php?st-defender-control Password is sordum You may have to disable Tamper Protection for this to work properly.\n\nStep 2: Run the tool and click Disable Windows Defender."
+    },
+    {
+      "title": "Disabling Secure Boot",
+      "text": "These instructions may differ depending on your motherboard's manufacturer. I recommend searching on Google on how to specifically disable it for your motherboard. (eg: B550M Asus How to Disable Secure Boot ; Model of Motherboard + Brand Name + How to Disable Secure Boot )\n\nRestart your PC and press the BIOS/UEFI key (F2, F10, Del, Esc) immediately upon startup.\n\nNavigate to the Boot or Security tab, find Secure Boot, and set it to Disabled.\n\nSave changes and exit BIOS/UEFI."
+    },
+    {
+      "title": "Disable Windows Core Isolation (Memory Integrity)",
+      "text": "Open Windows Security > Device Security > Core Isolation Details.\n\nTurn off Memory Integrity.\n\nRestart your PC for the changes to take effect."
+    },
+    {
+      "title": "Disabling FACEIT Anti-Cheat & Vanguard / Disable FACEIT Anti-Cheat",
+      "text": "Right-click the FACEIT Anti-Cheat icon in the system tray and select Exit.\n\nTo prevent it from starting up automatically, press Win + R, type msconfig, and press Enter.\n\nGo to the Startup tab, find FACEIT, and uncheck it. Click OK and restart your computer.\n\nDisable Vanguard (Valorant's Anti-Cheat):\nRight-click the Vanguard tray icon and select Exit to shut it down temporarily.\n\nFor a more permanent solution, press Win + R, type services.msc, and press Enter.\n\nScroll down to VGC, right-click it, select Properties, set Startup type to Disabled, and click OK.\n\nRestart your PC for the changes to take effect."
+    },
+    {
+      "title": "Force Disabling Vanguard/FaceIT Drivers",
+      "text": "Press WIN + R, type down cmd, and press Enter\n\nType down sc stop FACEIT or sc stop vgk, the former for FACEIT, the latter for Vanguard."
+    },
+    {
+      "title": "Incomplete Menu",
+      "text": "If you see the cheat menu load half way or incompletely, press NUMPAD 3 while in the main menu."
+    },
+    {
+      "title": "How to Report BSOD Crashes",
+      "text": "Follow these steps to set up Memory Dump settings and help report BSODs if you encounter them.\n\nEnable Full Kernel Memory Dump:\nAccess Control Panel: Go to System and Security > System.\nAdvanced System Settings: Click on Advanced system settings, then go to the Advanced tab.\nStartup and Recovery Settings: Click on Settings in the Startup and Recovery section.\nSelect Memory Dump Type: Ensure either Kernel memory dump or Complete memory dump is selected under Writing Debugging Information.\nRestart Your PC: Save changes and restart your computer to apply these settings.\n\nCrash Dump Collection:\nWhen a BSOD occurs, allow your system to complete the memory dump process to 100% and auto-restart.\n\nLocate and Prepare the Dump File:\nFind the MEMORY.DMP file, usually located at C:\\Windows\\MEMORY.DMP.\nOptional: Compress the file to reduce its size for easier uploading. You may also have to move the file temporarily to the desktop to avoid permission errors.\n\nUpload and Report:\nUpload the compressed dump file to [WeTransfer] or [MegaNZ](https://wetransfer.com/ or https://mega.nz).\nCreate a ticket in #📩create-ticket and provide the download link to the dump."
+    },
+    {
+      "title": "How to Report Crashes",
+      "text": "First, enable Crash Dump Mode via the loader - you can go do this via opening the loader -> Login -> Settings Tab -> Enable Crash Dump Mode Don't enable this function unless you were told to do so by an admin as it is a risky option in term of stability and security. Don't forget to disable it after reporting the crash.\nOnce you crash, navigate to the Escape from Tarkov folder, and you should see a file named BsgCrashDump.dmp.\nYou can then upload the file via mega.nz or workupload.com\n\nAgain, don't forget to disable this function AFTER you reported you uploaded the crash."
+    }
+  ]
+}

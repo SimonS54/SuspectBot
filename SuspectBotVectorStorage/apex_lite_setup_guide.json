@@ -1,0 +1,29 @@
+{
+  "guide": "Apex Lite Setup Guide",
+  "sections": [
+    {
+      "title": "Step 1: Install Medal.tv",
+      "text": "Install Medal.tv to prepare your system for the overlay.\nDownload it here: https://medal.tv/"
+    },
+    {
+      "title": "Step 2: Submit Your Key",
+      "text": "Provide your product key to the vendor to receive a custom loader.\nContact the dealer via the provided method (e.g., Discord) and they’ll hook you up."
+    },
+    {
+      "title": "Step 3: Wait for Custom Loader Link",
+      "text": "Wait for the vendor to process your key and send you a link to your custom loader.\nThis can take up to 7 minutes—be patient while it’s being prepared."
+    },
+    {
+      "title": "Step 4: Disable Real-Time Protection and Prepare",
+      "text": "In the meantime:\n- Turn off real-time protection in Windows Security to prevent the loader from being deleted.\n- Download and extract any required runtime files (e.g., Visual C++ Runtimes).\n- Run the installer (e.g., install_all.bat) as administrator if provided."
+    },
+    {
+      "title": "Step 5: Run the Custom Loader",
+      "text": "Once you receive the custom loader link:\n- Download the loader.\n- Run it as administrator.\n- Enter your key when prompted.\n- Wait for the loader to process (it might display a waiting message).\n- Follow the on-screen instructions to complete the injection."
+    },
+    {
+      "title": "Step 6: Launch Apex Legends",
+      "text": "Stay freaky and launch Apex Legends.\nEnsure the game is set to 'Borderless' or 'Windowed' mode in settings for optimal performance."
+    }
+  ]
+}

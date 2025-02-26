@@ -1,0 +1,57 @@
+{
+  "guide": "Marvel Rivals Klar Errors Guide",
+  "sections": [
+    {
+      "title": "Error VGC.SYS",
+      "text": "Uninstall Vanguard."
+    },
+    {
+      "title": "Error BHDRVS.SYS",
+      "text": "Uninstall Norton antivirus."
+    },
+    {
+      "title": "Error BEDAISY.SYS",
+      "text": "Launch Klar before opening the game, not while it’s running."
+    },
+    {
+      "title": "Error L2",
+      "text": "Uninstall Faceit and Vanguard, disable antivirus, and turn off Core Isolation."
+    },
+    {
+      "title": "Error L2 -(1073741637)",
+      "text": "1. Go to Settings > Security > Device Security.\n2. Turn off Memory Integrity.\n3. Restart PC and verify it’s off.\n4. Start the loader."
+    },
+    {
+      "title": "Error L2 -(1073741670)",
+      "text": "Uninstall FACEIT AC from your PC."
+    },
+    {
+      "title": "Error VCRUNTIME/MSVCP140.DLL",
+      "text": "Install vc_redist.x64.exe: [Download](https://aka.ms/vs/17/release/vc_redist.x64.exe)"
+    },
+    {
+      "title": "Error M1 | DEBUG ERROR 2",
+      "text": "Temporary fix: Restart PC per injection. Permanent fix: Reinstall Windows to PRO version."
+    },
+    {
+      "title": "Error Loader Closing at 100%",
+      "text": "Go to Windows Settings > Date and Time > 'Sync Now', then reinject Klar."
+    },
+    {
+      "title": "Error Loader Shows Banned",
+      "text": "Restart PC and retry after 2 hours."
+    },
+    {
+      "title": "Error BSOD",
+      "text": "Run as admin in CMD: `sfc /scannow`, then `DISM.exe /Online /Cleanup-image /Restorehealth`. Restart PC and reinject."
+    },
+    {
+      "title": "Error 0xc0000142",
+      "text": "Caused by Windows Insider—reinstall to normal Windows version."
+    },
+    {
+      "title": "Error Connection Error 3",
+      "text": "Server downtime—wait for product update."
+    }
+  ]
+}

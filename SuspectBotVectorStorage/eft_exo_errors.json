@@ -1,0 +1,17 @@
+{
+  "guide": "EFT Exo Errors Guide",
+  "sections": [
+    {
+      "title": "Error 92",
+      "text": "Disable Secure Boot in your BIOS settings."
+    },
+    {
+      "title": "Error 94",
+      "text": "Set your BIOS to UEFI mode."
+    },
+    {
+      "title": "Error 95",
+      "text": "Enable Virtualization in your BIOS."
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "guide": "Fluent Setup Guide",
+  "sections": [
+    {
+      "title": "Setup",
+      "text": "To get started download our loader from here:\nfluent.gg/loader.exe\n\nMake sure your antivirus is disabled before downloading.\nIt is highly recommended to run our loader from an USB drive.\nIt is best to download it straight to your USB drive.\n\nHere are the requirements for running our loader:\nWindows 10/11 (Insider/preview builds and custom Windows ISOs are not supported)\n\n64-bit CPU with AVX instruction set\n\nFast boot disabled\n\nNo running hypervisors (some machines might require disabling virtualisation)\n\nAnti-virus disabled\n\nAdministrator privilege\n\nSecure boot disabled"
+    },
+    {
+      "title": "How to Use the Loader",
+      "text": "Make sure you have your game closed before launching the loader."
+    },
+    {
+      "title": "How to Inject",
+      "text": "Run loader as administrator from USB drive (doing otherwise is not recommended and might result in bans). (You might get a message that you have to turn something off, you can get more details below)\n\nLogin or create an account if you do not have such already.\n\nClick and highlight the product you want to inject on the left side. You can see the status and expiration date on the right.\n\nClick “Inject” to load the product.\n\nWait for the loader to fully close.\n\nUnplug your USB.\n\nNow you can start your game."
+    },
+    {
+      "title": "How to Activate a Key",
+      "text": "Run loader as administrator from USB drive (doing otherwise is not recommended and might result in bans). (You might get a message that you have to turn something off, you can get more details below)\n\nLogin or create an account if you do not have such already.\n\nPaste in your key in the “License Key” field and press the “Activate Key” button. If you encounter any issues make sure you have no extra space in your key!"
+    },
+    {
+      "title": "Game Specific Section: Rust",
+      "text": "Built-in spoofer has a seed file, you should delete it after each ban.\nC:\\hwid_seed.bin\n\nIf you experience bans, reinstall Windows and disable Windows Defender using Defender Control before downloading/launching loader."
+    },
+    {
+      "title": "How to Disable Fast Boot",
+      "text": "RECOMMENDED: You can disable fast boot in your BIOS (you should check your motherboard manual for more details)\n\nDisable fast boot in Windows\n\nOpen Control Panel\n\nSelect Power Options\n\nOn the left side click on “Choose what the power button does”\n\nClick “Change settings that are currently unavailable”\n\nMake sure there is no checkmark next to “Turn on fast startup (recommended)”, if you do not see this option, you have it already disabled in BIOS\n\nClick “Save changes”\n\nRestart your computer"
+    },
+    {
+      "title": "How to Disable Hypervisors",
+      "text": "Official hypervisors (Hyper-V, etc):\n\nOpen Command prompt as Administrator\n\nRun this command\nbcdedit /set {current} hypervisorlaunchtype off\n\nRestart your computer\n\nUnofficial hypervisors\n\nDisable virtualisation in BIOS or get instructions from the maker of the hypervisor you are running"
+    },
+    {
+      "title": "How to Disable Windows Defender",
+      "text": "It is recommended to use Defender Control\n\nDefender Control v2.1\n\nHow to turn off defender without 3rd party tools:\n\nTurn off Defender antivirus protection in Windows Security - Microsoft Support"
+    }
+  ]
+}

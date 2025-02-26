@@ -1,0 +1,25 @@
+{
+  "guide": "Matrix Rust Setup Guide",
+  "sections": [
+    {
+      "title": "Setup",
+      "text": "Download Loader here: https://gofile.io/d/VwJt9z\nVideo Tutorial: https://www.youtube.com/watch?v=hnanB1exR10\nIf you run into any issues, run our support tool & make everythin green: https://mega.nz/file/ioJQ3TAK#khDxBBZ0_LiX__6zEnfr2N6PG1_HDuv271J5rFus7yQ\nDO STEPS IN ORDER AND DO NOT SKIP ANYTHING\n\nIf you have issues throughout the process, make a ticket explaining your issue in detail on the discord"
+    },
+    {
+      "title": "Before You Start",
+      "text": "Before you start, make sure all Anti-Virus is disabled. If you are on Windows 11, open Core Isolation (Windows Search) and turn everything off and restart your PC.\n\nThe cheat only works on a specific version of rust, therefore RustLoader is needed to run the cheat! (REQUIRED)"
+    },
+    {
+      "title": "Downloading and Running RustLoader",
+      "text": "Download RustLoader files: https://mega.nz/file/A7ljHRBQ#9_CbgIOVXdSAGbp9yVagKOyTEno3hdYt-0EtoHsPb3Q\n\nThis downloads a .rar file and can only be opened with WinRAR\n\nLink to WinRAR: https://www.win-rar.com/postdownload.html?&L=0\n\nOpen the Rust.rar file and drag DepotDownloader.exe and RustLoader.exe to desktop\n\nOnce they are on your desktop, run RustLoader.exe\n\nA console will open, that will now download the specific version of rust.\n\nIt will download this rust version to a folder called \"rust_download\".\n\nThis will take a while, so please be patient.\n\nIf you get \"chunk download error\", just let it keep running, it's not an issue.\n\nOnce it is finished it will say \"Press Enter to launch Rust.exe...\", however do not do this yet. Close the console!"
+    },
+    {
+      "title": "Downloading and Injecting the Cheat Loader",
+      "text": "Next step: Download the cheat loader: https://gofile.io/d/7wUmvs\n\nPut this file anywhere you want.\n\nNext open it and press \"2\" to register an account.\n\nEnter username, password & license key.\n\nNext press \"1\" to \"Use a cheat\"\n\nSelect a cheat by typing the number.\n\nIt will now say \"Streaming (Cheat name)...\"\n\nWill take 1-2 minutes.\n\nOnce everthing is finished it will say \"Injection Queued!\" and close itself after."
+    },
+    {
+      "title": "Launching Rust and Troubleshooting",
+      "text": "Next step (IMPORTANT)\n\nIt is important that you never launch Rust from steam (It will crash)\n\nGo to your rust_download folder and open Rust.exe (NOT RustClient.exe)\n\nCheat will load in the main menu - Menu key: Insert\n\nIf you cannot see any servers, connect via console (Typically F1 key)\n\nFind servers here: https://www.battlemetrics.com/servers/rust\n\nIf you crash while loading, inject again with loader and try again, if it keeps not working, then the server is not supported atm."
+    }
+  ]
+}

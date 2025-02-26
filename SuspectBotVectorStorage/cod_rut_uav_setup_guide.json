@@ -1,0 +1,21 @@
+{
+  "guide": "RUT Unlock Tool Setup Guide",
+  "sections": [
+    {
+      "title": "Setup",
+      "text": "Welcome to the RUT & RUAVT Setup guide.\n⬇️ PLEASE ENSURE YOU GO THROUGH THIS ENTIRE GUIDE BEFORE ASKING FOR HELP ⬇️\nWhat are RUT and RUAVT?\n\nRUT: Unlocks skins/camos and gives UAV, linked to your game account.\n\nRUAVT: Only gives UAV, linked to your computer.\n\nWhat Do You Need to Know?\nWorks with the latest version of COD:BO6 on Battle.net, Steam, and Xbox Game Pass.\n\nFor PC Only: Windows 10/11 supported. Doesn’t work on Mac, Xbox, or PS.\n\nNo Antivirus: You’ll need to remove all antivirus programs and disable Windows Defender."
+    },
+    {
+      "title": "Getting Your PC Ready",
+      "text": "1. Disable Windows Defender\n\nPress the Windows Key.\n\nSearch for “Virus & Threat Protection” and click it.\n\nGo to Manage Settings.\n\nTurn off Real-Time Protection and Tamper Protection.\n\n2. Use Defender Control\n\nDownload Defender Control here:\nhttps://github.com/sordum/Defender-Control/releases/\n\n3. Use the SuspectServices Support Tool\n\nDownload the Support Tool here:\nhttps://mega.nz/file/ioJQ3TAK#khDxBBZ0_LiX__6zEnfr2N6PG1_HDuv271J5rFus7yQ\n\nThis tool will automatically help you configure your PC for the RUT and RUAVT tools. To do this, make sure everything on the Support Tool is Displayed with a Green Button, anything that is red may cause issues running the tool.\n\nPlease IGNORE Smart Screen\n\n4. Disable Core Isolation\n\nFollow this video guide to disable Core Isolation:\nhttps://www.youtube.com/watch?v=AEjt7daC60g\n\n5. Verify Everything is Ready\n\nOnce the Support Tool shows all green, your PC is ready to use the tool."
+    },
+    {
+      "title": "Download and Run the Tool",
+      "text": "Download the tool here:\nhttps://rut.gg/?rut_v3\n\nDrag the tool to your Desktop.\n\nRun as Administrator: Right-click the tool and choose “Run as Administrator.”\n\nEnter your key when prompted, and follow the steps on the loader."
+    },
+    {
+      "title": "Using the Tool In-Game - Unlock Tool + UAV",
+      "text": "Open Call of Duty Black Ops 6.\n\nAt the Game Mode Selection Screen (before choosing Black Ops 6 or Warzone), press F2 on your keyboard.\n\nGo into Black Ops 6 Multiplayer, Warzone, or Zombies, and press F3. This activates the unlocker.\n\nNow, adjust your classes. You’ll have everything unlocked.\n\nTo Activate the UAV Tool, head in game and Press F5 on your keyboard.\n\nUsing the Tool In-Game - Unlock Tool + UAV\nOpen Call of Duty Black Ops 6.\n\nAt the Game Mode Selection Screen (before choosing Black Ops 6 or Warzone), press F2 on your keyboard.\n\nGo into Black Ops 6 Multiplayer, Warzone, or Zombies, and press F3. This activates the UAV\n\nTo turn the UAV On and Off in-game Press F5 On your keyboard."
+    }
+  ]
+}

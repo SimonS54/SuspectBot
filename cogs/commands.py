@@ -17,7 +17,7 @@ class GeneralCommands(commands.Cog):
                 color=discord.Color.red()
             )
             embed.add_field(
-                name="📘 Documentation",
+                name="📘 Documentation — (use + error for error codes)",
                 value="*/apexlite* - Apex Lite guide\n"
                       "*/apexkernaim* - Apex Kernaim guide\n"
                       "*/codkernaim* - COD Kernaim guide\n"
