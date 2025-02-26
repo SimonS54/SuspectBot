@@ -5,54 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cd209a74-0b78-4c33-9cb1-66d479fc594d" name="Changes" comment="KC">
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/apex_kernaim_errors.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/apex_kernaim_setup_guide.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/apex_lite_errors.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/apex_lite_setup_guide.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/cod_kernaim_errors.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/cod_kernaim_setup_guide.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/cod_rut_uav_errors.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/cod_rut_uav_setup_guide.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/cod_rut_unlocker_errors.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/cod_rut_unlocker_setup_guide.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/eft_exo_arena_errors.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/eft_exo_arena_setup_guide.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/eft_exo_errors.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/eft_exo_setup_guide.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/eft_nextcheat_full_errors.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/eft_nextcheat_full_setup_guide.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/eft_nextcheat_lite_errors.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/eft_nextcheat_lite_setup_guide.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/fivem_hx_errors.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/fivem_hx_setup_guide.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/fivem_tz_external_errors.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/fivem_tz_external_setup_guide.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/fivem_tz_internal_errors.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/fivem_tz_internal_setup_guide.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/fn_disconnect_external_errors.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/fn_disconnect_external_setup_guide.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/hwid_spoofer_exception_errors.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/hwid_spoofer_exception_setup_guide.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/marvel_rivals_klar_errors.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/marvel_rivals_klar_setup_guide.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/r6_ring1_errors.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/r6_ring1_setup_guide.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/rust_disconnect_external_errors.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/rust_disconnect_external_setup_guide.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/rust_fluent_errors.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/rust_fluent_setup_guide.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/rust_matrix_errors.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/rust_matrix_setup_guide.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/rust_recoil_script_errors.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/rust_recoil_script_setup_guide.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SuspectBotVectorStorage/suspectbot_commands.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SuspectBot.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/cogs/ai_assistant.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/ai_assistant.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/commands.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/commands.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/moderation.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/moderation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/stats.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/stats.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

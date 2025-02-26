@@ -2,7 +2,7 @@ import discord
 import openai
 import os
 from dotenv import load_dotenv
-from discord.ext import commands
+from discord.ext import commands, tasks
 from firebase_config import db
 from firebase_admin import firestore
 from config import CATEGORY_IDS, AI_REVIEW_CHANNEL_ID
@@ -11,16 +11,15 @@ import asyncio
 from Levenshtein import distance as levenshtein_distance
 import re
 import time
-from googlesearch import search  # Requires `pip install google`
+from googlesearch import search
 
-# Load environment variables
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 MAX_TICKETS = 50
 STAFF_ROLE_IDS = {1297999380745420822, 1297999355860615209, 1297999091187581020}
 NOTIFY_USER_ID = 368435292916416512
-EMBED_FIELD_LIMIT = 1000  # Discord embed field character limit
+EMBED_FIELD_LIMIT = 1000
 
 class AIAssistant(commands.Cog):
     def __init__(self, bot):
@@ -28,30 +27,64 @@ class AIAssistant(commands.Cog):
         self.active_tickets = {}
         self.assistant_id = "asst_kMPncHzly9M28mIQtCLe102e"
         self.client = openai.OpenAI()
+        self.check_closed_tickets.start()
 
     async def cog_load(self):
         print("Initializing AIAssistant with existing tickets...")
         tickets_ref = db.collection("tickets")
         tickets = tickets_ref.stream()
         for ticket in tickets:
-            ticket_id = ticket.id
-            self.active_tickets[ticket_id] = True
-            print(f"Loaded ticket: {ticket_id}")
+            ticket_data = ticket.to_dict()
+            ticket_id = ticket_data.get("ticket_id")  # Use the ticket_id field, not document ID
+            if ticket_id and ticket_id.isdigit():  # Ensure it's a valid numeric channel ID
+                self.active_tickets[ticket_id] = True
+                print(f"Loaded ticket: {ticket_id}")
+            else:
+                print(f"Skipping invalid ticket ID: {ticket_id} from document {ticket.id}")
         print(f"Initialized with {len(self.active_tickets)} tickets.")
 
     async def enforce_ticket_limit(self):
-        """ Ensure the tickets collection stays under MAX_TICKETS by removing the oldest ones. """
         tickets_ref = db.collection("tickets")
         tickets = list(tickets_ref.order_by("created_at").stream())
         if len(tickets) > MAX_TICKETS:
             tickets_to_remove = tickets[:len(tickets) - MAX_TICKETS]
             for ticket in tickets_to_remove:
-                ticket_id = ticket.id
+                ticket_id = ticket.to_dict().get("ticket_id", ticket.id)
                 ticket.reference.delete()
                 if ticket_id in self.active_tickets:
                     del self.active_tickets[ticket_id]
                 print(f"Removed old ticket: {ticket_id}")
             print(f"Ticket count reduced to {MAX_TICKETS}")
+
+    @tasks.loop(minutes=5)
+    async def check_closed_tickets(self):
+        print("Checking for closed tickets...")
+        tickets_to_remove = []
+        for ticket_id in list(self.active_tickets.keys()):
+            channel = self.bot.get_channel(int(ticket_id))
+            if not channel or channel.category_id not in CATEGORY_IDS:
+                doc_ref = db.collection("tickets").document(ticket_id)
+                doc = doc_ref.get()
+                if doc.exists:
+                    ticket_data = doc.to_dict()
+                    if not ticket_data.get("closed", False):
+                        doc_ref.update({"closed": True})
+                        print(f"Ticket {ticket_id} marked as closed (channel not found).")
+                        user = self.bot.get_user(NOTIFY_USER_ID)
+                        if user:
+                            ticket_count = len(list(db.collection("tickets").where("closed", "==", True).stream()))
+                            await user.send(f"Ticket {ticket_id} is closed. {ticket_count}/{MAX_TICKETS} tickets collected for fine-tuning.")
+                            if ticket_count >= MAX_TICKETS:
+                                await user.send("🎉 50 tickets collected! Ready for fine-tuning!")
+                tickets_to_remove.append(ticket_id)
+
+        for ticket_id in tickets_to_remove:
+            del self.active_tickets[ticket_id]
+        print(f"Finished checking tickets. Active tickets remaining: {len(self.active_tickets)}")
+
+    @check_closed_tickets.before_loop
+    async def before_check_closed_tickets(self):
+        await self.bot.wait_until_ready()
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -102,20 +135,21 @@ class AIAssistant(commands.Cog):
     @commands.Cog.listener()
     async def on_raw_message_delete(self, payload):
         ticket_id = str(payload.channel_id)
-        doc_ref = db.collection("tickets").document(ticket_id)
-        doc = doc_ref.get()
-        if doc.exists and payload.channel_id in [int(t) for t in self.active_tickets.keys()]:
-            ticket_data = doc.to_dict()
-            if not ticket_data.get("closed", False):
-                ticket_data["closed"] = True
-                doc_ref.update({"closed": True})
-                print(f"Ticket {ticket_id} marked as closed.")
-                user = self.bot.get_user(NOTIFY_USER_ID)
-                if user:
-                    ticket_count = len(list(db.collection("tickets").where("closed", "==", True).stream()))
-                    await user.send(f"Ticket {ticket_id} is closed. {ticket_count}/50 tickets collected for fine-tuning.")
-                    if ticket_count >= 50:
-                        await user.send("🎉 50 tickets collected! Ready for fine-tuning.")
+        if ticket_id in self.active_tickets:
+            doc_ref = db.collection("tickets").document(ticket_id)
+            doc = doc_ref.get()
+            if doc.exists:
+                ticket_data = doc.to_dict()
+                if not ticket_data.get("closed", False):
+                    doc_ref.update({"closed": True})
+                    print(f"Ticket {ticket_id} marked as closed (message deleted).")
+                    user = self.bot.get_user(NOTIFY_USER_ID)
+                    if user:
+                        ticket_count = len(list(db.collection("tickets").where("closed", "==", True).stream()))
+                        await user.send(f"Ticket {ticket_id} is closed. {ticket_count}/{MAX_TICKETS} tickets collected for fine-tuning.")
+                        if ticket_count >= MAX_TICKETS:
+                            await user.send("🎉 50 tickets collected! Ready for fine-tuning!")
+            del self.active_tickets[ticket_id]
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
@@ -180,6 +214,19 @@ class AIAssistant(commands.Cog):
             print(f"Skipping staff message in ticket {ticket_id}: '{last_message['content']}'")
             return
 
+        message_content = last_message["content"].lower().strip()
+        question_indicators = {'how', 'why', 'what', 'where', 'when', 'can', 'does', 'is', 'are',
+                               'setup', 'install', 'fix', 'error', 'crash', 'problem', 'issue', 'help'}
+        casual_indicators = {'hi', 'hello', 'hey', 'thanks', 'thank you', 'ok', 'okay', 'cool'}
+
+        if (not message_content or
+                len(message_content) < 5 or
+                any(message_content.startswith(word) for word in casual_indicators) or
+                (not any(word in message_content.split() for word in question_indicators) and
+                 not message_content.endswith('?'))):
+            print(f"Skipping casual/non-question message in ticket {ticket_id}: '{message_content}'")
+            return
+
         approved_ref = db.collection("approved_responses").document(ticket_id)
         approved_doc = approved_ref.get()
         if approved_doc.exists:
@@ -220,7 +267,6 @@ class AIAssistant(commands.Cog):
         if ai_response:
             ai_response = re.sub(r"【.*†source】", "", ai_response).strip()
             if "NO_ANSWER" in ai_response:
-                # Try web search as fallback
                 ai_response = await self._search_web(last_message_content, ticket_id)
                 if not ai_response:
                     ai_response = "Please wait for assistance from the staff team."
@@ -229,7 +275,6 @@ class AIAssistant(commands.Cog):
             if not ai_response:
                 ai_response = "Please wait for assistance from the staff team."
 
-        # Split response into chunks if over 1024 chars
         response_chunks = [ai_response[i:i + EMBED_FIELD_LIMIT] for i in range(0, len(ai_response), EMBED_FIELD_LIMIT)]
         embed.clear_fields()
         for i, chunk in enumerate(response_chunks):
@@ -245,7 +290,6 @@ class AIAssistant(commands.Cog):
         await msg.add_reaction("👎")
 
     async def _poll_ai_response(self, prior_context, last_message, ticket_id):
-        """ Asynchronously poll the Assistants API for a response. """
         try:
             thread = self.client.beta.threads.create()
             self.client.beta.threads.messages.create(
@@ -289,7 +333,6 @@ class AIAssistant(commands.Cog):
             return None
 
     async def _search_web(self, query, ticket_id):
-        """ Search the web for a solution if vector storage fails. """
         try:
             search_query = f"{query} Windows troubleshooting steps recent results"
             results = []
@@ -301,7 +344,7 @@ class AIAssistant(commands.Cog):
                     "Check for recent Windows troubleshooting guides online. For example, try updating your system or running 'sfc /scannow' in Command Prompt as an administrator. "
                     "If this doesn’t help, please wait for staff assistance."
                 )
-                return response[:EMBED_FIELD_LIMIT]  # Cap at 1024 for safety
+                return response[:EMBED_FIELD_LIMIT]
             return None
         except Exception as e:
             print(f"Error searching web for ticket {ticket_id}: {e}")
