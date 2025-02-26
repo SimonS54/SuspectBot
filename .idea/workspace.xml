@@ -5,26 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cd209a74-0b78-4c33-9cb1-66d479fc594d" name="Changes" comment="KC">
-      <change afterPath="$PROJECT_DIR$/LICENSE" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cogs/ai_assistant.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/ai_assistant.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/commands.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/commands.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/docs.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/docs.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/epvp.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/epvp.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/error.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/error.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/message_filter.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/message_filter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/moderation.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/moderation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/payment.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/payment.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/stats.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/stats.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/support.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/support.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/suspectbotdb.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/suspectbotdb.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firebase_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/firebase_config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

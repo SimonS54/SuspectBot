@@ -11,6 +11,12 @@ import asyncio
 from Levenshtein import distance as levenshtein_distance  # For string similarity comparison
 import re
 import time
+import logging
+import uuid  # For generating unique message IDs
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Load environment variables and set OpenAI API key
 load_dotenv()
@@ -42,8 +48,8 @@ class AIAssistant(commands.Cog):
             if ticket_id and ticket_id.isdigit():
                 self.active_tickets[ticket_id] = True
             else:
-                print(f"Skipping invalid ticket ID: {ticket_id} from document {ticket.id}")
-        print(f"Initialized with {len(self.active_tickets)} tickets.")
+                logger.info(f"Skipping invalid ticket ID: {ticket_id} from document {ticket.id}")
+        logger.info(f"Initialized with {len(self.active_tickets)} tickets.")
 
     # Enforce the maximum ticket limit by removing oldest tickets
     async def enforce_ticket_limit(self):
@@ -56,8 +62,8 @@ class AIAssistant(commands.Cog):
                 ticket.reference.delete()
                 if ticket_id in self.active_tickets:
                     del self.active_tickets[ticket_id]
-                print(f"Removed old ticket: {ticket_id}")
-            print(f"Ticket count reduced to {MAX_TICKETS}")
+                logger.info(f"Removed old ticket: {ticket_id}")
+            logger.info(f"Ticket count reduced to {MAX_TICKETS}")
 
     # Background task to periodically check for closed tickets
     @tasks.loop(minutes=5)
@@ -73,7 +79,7 @@ class AIAssistant(commands.Cog):
                     ticket_data = doc.to_dict()
                     if not ticket_data.get("closed", False):
                         doc_ref.update({"closed": True})
-                        print(f"Ticket {ticket_id} marked as closed (channel not found).")
+                        logger.info(f"Ticket {ticket_id} marked as closed (channel not found).")
                         user = self.bot.get_user(NOTIFY_USER_ID)
                         if user:
                             ticket_count = len(list(db.collection("tickets").where(filter=firestore.FieldFilter("closed", "==", True)).stream()))
@@ -84,7 +90,7 @@ class AIAssistant(commands.Cog):
 
         for ticket_id in tickets_to_remove:
             del self.active_tickets[ticket_id]
-        print(f"Finished checking tickets. Active tickets remaining: {len(self.active_tickets)}")
+        logger.info(f"Finished checking tickets. Active tickets remaining: {len(self.active_tickets)}")
 
     # Ensure the bot is ready before starting the ticket check loop
     @check_closed_tickets.before_loop
@@ -108,11 +114,15 @@ class AIAssistant(commands.Cog):
         doc_ref = db.collection("tickets").document(ticket_id)
         doc = doc_ref.get()
 
+        # Generate a unique message ID
+        message_id = str(uuid.uuid4())
+
         new_ticket = not doc.exists
         if doc.exists:
             # Update existing ticket with the new message
             ticket_data = doc.to_dict()
             ticket_data["messages"].append({
+                "message_id": message_id,
                 "user_id": user_id,
                 "content": message.content,
                 "timestamp": datetime.datetime.utcnow(),
@@ -120,25 +130,27 @@ class AIAssistant(commands.Cog):
             })
             doc_ref.update({"messages": ticket_data["messages"]})
         else:
-            # Create a new ticket document
+            # Create a new ticket document with an empty suggestions array
             doc_ref.set({
                 "ticket_id": ticket_id,
                 "created_at": datetime.datetime.utcnow(),
                 "messages": [{
+                    "message_id": message_id,
                     "user_id": user_id,
                     "content": message.content,
                     "timestamp": datetime.datetime.utcnow(),
                     "role": role
                 }],
+                "suggestions": [],  # Initialize suggestions array
                 "closed": False
             })
             self.active_tickets[ticket_id] = True
-            print(f"New ticket created and cached: {ticket_id}")
+            logger.info(f"New ticket created and cached: {ticket_id}")
 
         if new_ticket:
             await self.enforce_ticket_limit()  # Enforce ticket limit for new tickets
 
-        await self.check_for_suggestions(message.channel, ticket_id)  # Check for AI suggestions
+        await self.check_for_suggestions(message.channel, ticket_id, message_id)  # Pass the message_id
 
     # Listener to handle ticket closure when a message is deleted
     @commands.Cog.listener()
@@ -151,7 +163,7 @@ class AIAssistant(commands.Cog):
                 ticket_data = doc.to_dict()
                 if not ticket_data.get("closed", False):
                     doc_ref.update({"closed": True})
-                    print(f"Ticket {ticket_id} marked as closed (message deleted).")
+                    logger.info(f"Ticket {ticket_id} marked as closed (message deleted).")
                     user = self.bot.get_user(NOTIFY_USER_ID)
                     if user:
                         ticket_count = len(list(db.collection("tickets").where(filter=firestore.FieldFilter("closed", "==", True)).stream()))
@@ -170,24 +182,46 @@ class AIAssistant(commands.Cog):
         if reaction.message.channel.id != review_channel.id:
             return  # Only process reactions in the AI review channel
 
-        # Fetch the suggestion document based on the message ID
-        doc_ref = db.collection("ai_suggestions").where(filter=firestore.FieldFilter("message_id", "==", str(reaction.message.id))).limit(1)
-        docs = doc_ref.stream()
-        doc_list = list(docs)
+        logger.info(f"Searching for suggestion with message_id {reaction.message.id}")
 
-        if not doc_list:
+        # Fetch the latest ticket state
+        ticket_ref = None
+        ticket = None
+        suggestion_index = None
+        tickets = db.collection("tickets").stream()
+        for t in tickets:
+            ticket_data = t.to_dict()
+            suggestions = ticket_data.get("suggestions", [])
+            for i, s in enumerate(suggestions):
+                if isinstance(s, dict) and s.get("message_id") == str(reaction.message.id):
+                    ticket = t
+                    ticket_ref = db.collection("tickets").document(ticket_data["ticket_id"])
+                    suggestion_index = i
+                    break
+            if ticket:
+                break
+
+        if not ticket or suggestion_index is None:
+            logger.warning(f"No ticket found with suggestion message_id {reaction.message.id}")
             return  # No matching suggestion found
 
-        suggestion_data = doc_list[0].to_dict()
-        ticket_id = suggestion_data["ticket_id"]
-        ai_response = suggestion_data["ai_response"]
+        ticket_id = ticket.to_dict()["ticket_id"]
+        suggestion = ticket.to_dict()["suggestions"][suggestion_index]
+        ai_response = suggestion["ai_response"]
+        message_ref_id = suggestion["message_ref_id"]
+        # Find the original message by message_ref_id
+        original_message = next((m["content"] for m in ticket.to_dict()["messages"] if m["message_id"] == message_ref_id), None)
 
         if reaction.emoji == "👍":
-            print(f"✅ Approving AI response for ticket {ticket_id}")
+            logger.info(f"✅ Approving AI response for ticket {ticket_id}")
             approved_ref = db.collection("approved_responses").document(ticket_id)
             try:
-                # Save the approved response to Firestore
-                approved_ref.set({"responses": firestore.ArrayUnion([ai_response])}, merge=True)
+                # Save the approved response along with the original message to Firestore
+                approved_entry = {
+                    "response": ai_response,
+                    "original_message": original_message
+                }
+                approved_ref.set({"responses": firestore.ArrayUnion([approved_entry])}, merge=True)
                 embed = discord.Embed(
                     title="✅ AI Response Approved",
                     description=f"{user.mention}, the AI suggestion for ticket `{ticket_id}` has been approved and saved!",
@@ -196,12 +230,38 @@ class AIAssistant(commands.Cog):
                 embed.set_footer(text="Powered by SuspectServices • AI Section", icon_url=self.bot.user.avatar.url)
                 await reaction.message.channel.send(embed=embed, delete_after=5)
             except Exception as e:
-                print(f"Error approving response for ticket {ticket_id}: {e}")
+                logger.error(f"Error approving response for ticket {ticket_id}: {str(e)}")
 
         elif reaction.emoji == "👎":
-            print(f"❌ Rejecting AI response for ticket {ticket_id}")
+            logger.info(f"❌ Rejecting AI response for ticket {ticket_id}")
             try:
-                doc_list[0].reference.update({"rejected": True})
+                # Fetch the latest document state
+                current_doc = ticket_ref.get()
+                current_suggestions = current_doc.to_dict().get("suggestions", [])
+                if suggestion_index >= len(current_suggestions):
+                    logger.error(f"Invalid suggestion_index {suggestion_index} for ticket {ticket_id}, array length: {len(current_suggestions)}")
+                    return
+
+                # Log the suggestion state before rejection
+                logger.info(f"Before rejection, suggestion state: {suggestion}")
+
+                # Update the suggestion by rewriting it
+                updated_suggestion = current_suggestions[suggestion_index].copy()
+                updated_suggestion["rejected"] = True
+                current_suggestions[suggestion_index] = updated_suggestion
+
+                logger.info(f"Applying update: setting suggestions[{suggestion_index}] to {updated_suggestion}")
+                ticket_ref.update({"suggestions": current_suggestions})
+
+                # Fetch and log the updated document state
+                updated_doc = ticket_ref.get()
+                updated_suggestions = updated_doc.to_dict().get("suggestions", [])
+                if suggestion_index < len(updated_suggestions):
+                    updated_suggestion = updated_suggestions[suggestion_index]
+                    logger.info(f"After rejection, suggestion state: {updated_suggestion}")
+                else:
+                    logger.error(f"Suggestion index {suggestion_index} out of bounds after update for ticket {ticket_id}")
+
                 embed = discord.Embed(
                     title="❌ AI Response Rejected",
                     description=f"{user.mention}, the AI suggestion for ticket `{ticket_id}` has been rejected. You can reply with a better response within 5 minutes to improve it for future use.",
@@ -218,23 +278,32 @@ class AIAssistant(commands.Cog):
                     try:
                         correction = await self.bot.wait_for('message', check=check, timeout=300)  # 5-minute window
                         try:
-                            doc_list[0].reference.update({"staff_correction": correction.content})
-                            print(f"Staff correction added for ticket {ticket_id}: {correction.content}")
-                            success_embed = discord.Embed(
-                                title="✅ Correction Saved",
-                                description=f"{correction.author.mention}, your correction for ticket `{ticket_id}` has been successfully saved for future improvement.",
-                                color=discord.Color.green()
-                            )
-                            success_embed.set_footer(text="Powered by SuspectServices • AI Section", icon_url=self.bot.user.avatar.url)
-                            await reaction.message.channel.send(embed=success_embed, delete_after=5)
+                            correction_doc = ticket_ref.get()
+                            correction_suggestions = correction_doc.to_dict().get("suggestions", [])
+                            if suggestion_index < len(correction_suggestions):
+                                correction_suggestion = correction_suggestions[suggestion_index].copy()
+                                correction_suggestion["staff_correction"] = correction.content
+                                correction_suggestions[suggestion_index] = correction_suggestion
+                                ticket_ref.update({"suggestions": correction_suggestions})
+                                logger.info(f"Staff correction added for ticket {ticket_id}: {correction.content}")
+                                success_embed = discord.Embed(
+                                    title="✅ Correction Saved",
+                                    description=f"{correction.author.mention}, your correction for ticket `{ticket_id}` has been successfully saved for future improvement.",
+                                    color=discord.Color.green()
+                                )
+                                success_embed.set_footer(text="Powered by SuspectServices • AI Section", icon_url=self.bot.user.avatar.url)
+                                await reaction.message.channel.send(embed=success_embed, delete_after=5)
+                            else:
+                                logger.error(f"Suggestion index {suggestion_index} out of bounds during correction for ticket {ticket_id}")
                         except Exception as e:
-                            print(f"Error updating staff_correction for ticket {ticket_id}: {e}")
+                            logger.error(f"Error updating staff_correction for ticket {ticket_id}: {str(e)}")
                     except asyncio.TimeoutError:
-                        print(f"No staff correction received within 5 minutes for ticket {ticket_id}")
+                        logger.info(f"No staff correction received within 5 minutes for ticket {ticket_id}")
 
                 await check_correction()
             except Exception as e:
-                print(f"Error processing downvote for ticket {ticket_id}: {e}")
+                logger.error(f"Error processing downvote for ticket {ticket_id}: {str(e)}")
+                logger.error(f"Full exception details: {repr(e)}")
 
     # Score the quality of an AI response based on length and keyword overlap
     def score_response(self, response, question):
@@ -245,34 +314,39 @@ class AIAssistant(commands.Cog):
         overlap = len(question_words.intersection(response_words)) / len(question_words)
         return overlap > 0.2  # Require at least 20% keyword overlap
 
-    # Request clarification from the user in the ticket channel
+    # Request clarification from staff in the review channel instead of the ticket channel
     async def _request_clarification(self, channel, ticket_id, question):
+        """Request clarification from staff in the review channel instead of the ticket channel."""
+        review_channel = self.bot.get_channel(AI_REVIEW_CHANNEL_ID)  # Get the AI review channel
         embed = discord.Embed(
             title="🤖 Need More Info",
-            description="Can you specify what you mean? (e.g., what 'issues' or product you're referring to)",
+            description=f"For ticket `{channel.name}` (ID: {ticket_id}):\n"
+                        f"Question: '{question}'\n"
+                        f"Can staff specify what additional details are needed? (e.g., product, specific issue)",
             color=discord.Color.orange()
         )
-        await channel.send(embed=embed)
-        self.pending_clarifications[ticket_id] = question
-        print(f"Requested clarification for ticket {ticket_id}: {question}")
+        embed.set_footer(text="Powered by SuspectServices • AI Section", icon_url=self.bot.user.avatar.url)
+        await review_channel.send(embed=embed)  # Send to review channel instead of ticket channel
+        self.pending_clarifications[ticket_id] = question  # Track pending clarification
+        logger.info(f"Requested clarification for ticket {ticket_id} in review channel: {question}")
 
     # Check for and generate AI suggestions for customer messages
-    async def check_for_suggestions(self, channel, ticket_id):
+    async def check_for_suggestions(self, channel, ticket_id, message_id):
         review_channel = self.bot.get_channel(AI_REVIEW_CHANNEL_ID)
         doc_ref = db.collection("tickets").document(ticket_id)
         doc = doc_ref.get()
         if not doc.exists:
-            print(f"Ticket {ticket_id} not found in Firestore.")
+            logger.info(f"Ticket {ticket_id} not found in Firestore.")
             return
 
         messages = doc.to_dict().get("messages", [])
         if len(messages) < 1:
-            print(f"Ticket {ticket_id} has no messages yet.")
+            logger.info(f"Ticket {ticket_id} has no messages yet.")
             return
 
         last_message = messages[-1]
         if last_message["role"] != "customer":
-            print(f"Skipping staff message in ticket {ticket_id}: '{last_message['content']}'")
+            logger.info(f"Skipping staff message in ticket {ticket_id}: '{last_message['content']}'")
             return
 
         message_content = last_message["content"].lower().strip()
@@ -287,7 +361,7 @@ class AIAssistant(commands.Cog):
                 any(message_content.startswith(word) for word in casual_indicators) or
                 (not any(word in message_content.split() for word in question_indicators) and
                  not message_content.endswith('?'))):
-            print(f"Skipping casual/non-question message in ticket {ticket_id}: '{message_content}'")
+            logger.info(f"Skipping casual/non-question message in ticket {ticket_id}: '{message_content}'")
             return
 
         # Check for approved responses from previous tickets
@@ -296,11 +370,11 @@ class AIAssistant(commands.Cog):
         for doc in approved_docs:
             approved_data = doc.to_dict()
             for resp in approved_data.get("responses", []):
-                resp_lower = resp.lower()
+                resp_lower = resp["response"].lower() if isinstance(resp, dict) else resp.lower()
                 similarity = levenshtein_distance(last_msg_text, resp_lower)
                 if similarity <= min(len(last_msg_text), len(resp_lower)) * 0.2:
-                    print(f"Using approved response from ticket {doc.id} for ticket {ticket_id} (similarity: {similarity})")
-                    return resp  # Early return with approved response
+                    logger.info(f"Using approved response from ticket {doc.id} for ticket {ticket_id} (similarity: {similarity})")
+                    return resp["response"] if isinstance(resp, dict) else resp  # Return only the response string
 
         # Prepare context and message for AI processing
         prior_context = "\n".join([f"{m['role'].capitalize()} {m['user_id']}: {m['content']}" for m in messages[:-1][-9:]])
@@ -314,15 +388,15 @@ class AIAssistant(commands.Cog):
                 resolved_product = next((name for name in product_names if name in last_product), "product")
                 question = f"{resolved_product} {question.replace('it', '').replace('this', '').replace('that', '').strip()}"
                 last_message_content = f"Customer {last_message['user_id']}: {question}"
-                print(f"Resolved vague reference to {resolved_product}: {question}")
+                logger.info(f"Resolved vague reference to {resolved_product}: {question}")
 
         if ticket_id in self.pending_clarifications:
             prior_question = self.pending_clarifications.pop(ticket_id)
             question = f"{prior_question} - {question}"
             last_message_content = f"Customer {last_message['user_id']}: {question}"
-            print(f"Received clarification for ticket {ticket_id}: {question}")
+            logger.info(f"Received clarification for ticket {ticket_id}: {question}")
 
-        # Send initial embed to review channel
+        # Send initial embed to review channel with "Processing..."
         embed = discord.Embed(
             title="🤖 AI Suggestion",
             description=f"For ticket `{channel.name}`:",
@@ -335,18 +409,11 @@ class AIAssistant(commands.Cog):
         )
         embed.set_footer(text="Powered by SuspectServices • AI Section", icon_url=self.bot.user.avatar.url)
         msg = await review_channel.send(embed=embed)
-        suggestion_doc_ref = db.collection("ai_suggestions").document()
-        suggestion_doc_ref.set({
-            "ticket_id": ticket_id,
-            "ai_response": "Processing...",
-            "timestamp": datetime.datetime.utcnow(),
-            "rejected": False,
-            "message_id": str(msg.id),
-            "resolution_source": None
-        })
 
-        # Get AI response and process it
+        # Get AI response first
         ai_response = await self._poll_ai_response(prior_context, last_message_content, ticket_id)
+        resolution_source = None
+
         if ai_response:
             ai_response = re.sub(r"【.*†source】", "", ai_response).strip()
             if "NO_ANSWER" in ai_response:
@@ -382,9 +449,9 @@ class AIAssistant(commands.Cog):
                             any(phrase in ai_response.lower() for phrase in ["i don't have", "i can't", "could be", "might be", "not sure"]) or
                             not self.score_response(ai_response, question)):
                         ai_response = "I am sorry to inform you that I cannot help you with this issue, please try forming your question differently or wait to receive help from the staff team."
-                        suggestion_doc_ref.update({"ai_response": ai_response, "resolution_source": "staff"})
+                        resolution_source = "staff"
                     else:
-                        suggestion_doc_ref.update({"ai_response": ai_response, "resolution_source": "gpt"})
+                        resolution_source = "gpt"
                 else:
                     reason = ("time-specific" if has_time else
                               "context-specific" if has_context else
@@ -393,11 +460,11 @@ class AIAssistant(commands.Cog):
                     if intent == 'vague' or has_context:
                         await self._request_clarification(channel, ticket_id, question)
                         return
-                    print(f"Skipping web search due to {reason} question: {question}")
+                    logger.info(f"Skipping web search due to {reason} question: {question}")
                     ai_response = "I am sorry to inform you that I cannot help you with this issue, please try forming your question differently or wait to receive help from the staff team."
-                    suggestion_doc_ref.update({"ai_response": ai_response, "resolution_source": "staff"})
+                    resolution_source = "staff"
             else:
-                suggestion_doc_ref.update({"ai_response": ai_response, "resolution_source": "vector"})
+                resolution_source = "vector"
         else:
             # Handle case where no initial AI response is received
             error_terms = {'error', 'crash', 'fix', 'bug', 'fail', 'broken'}
@@ -432,9 +499,9 @@ class AIAssistant(commands.Cog):
                         any(phrase in ai_response.lower() for phrase in ["i don't have", "i can't", "could be", "might be", "not sure"]) or
                         not self.score_response(ai_response, question)):
                     ai_response = "I am sorry to inform you that I cannot help you with this issue, please try forming your question differently or wait to receive help from the staff team."
-                    suggestion_doc_ref.update({"ai_response": ai_response, "resolution_source": "staff"})
+                    resolution_source = "staff"
                 else:
-                    suggestion_doc_ref.update({"ai_response": ai_response, "resolution_source": "gpt"})
+                    resolution_source = "gpt"
             else:
                 reason = ("time-specific" if has_time else
                           "context-specific" if has_context else
@@ -443,9 +510,27 @@ class AIAssistant(commands.Cog):
                 if intent == 'vague' or has_context:
                     await self._request_clarification(channel, ticket_id, question)
                     return
-                print(f"Skipping web search due to {reason} question: {question}")
+                logger.info(f"Skipping web search due to {reason} question: {question}")
                 ai_response = "I am sorry to inform you that I cannot help you with this issue, please try forming your question differently or wait to receive help from the staff team."
-                suggestion_doc_ref.update({"ai_response": ai_response, "resolution_source": "staff"})
+                resolution_source = "staff"
+
+        # Save the suggestion with the final response linked to the message_id
+        suggestion = {
+            "ai_response": ai_response,
+            "timestamp": datetime.datetime.utcnow(),
+            "rejected": False,
+            "message_id": str(msg.id),
+            "resolution_source": resolution_source,
+            "message_ref_id": message_id  # Reference to the specific customer message
+        }
+        try:
+            doc_ref.update({
+                "suggestions": firestore.ArrayUnion([suggestion])
+            })
+            logger.info(f"Suggestion saved for ticket {ticket_id} with message_id {msg.id}, linked to message_ref_id {message_id}, response: {ai_response}")
+        except Exception as e:
+            logger.error(f"Failed to save suggestion for ticket {ticket_id}: {e}")
+            return
 
         # Update the embed with the AI response, splitting if necessary
         response_chunks = [ai_response[i:i + EMBED_FIELD_LIMIT] for i in range(0, len(ai_response), EMBED_FIELD_LIMIT)]
@@ -497,12 +582,12 @@ class AIAssistant(commands.Cog):
                         response = message.content[0].text.value
                         return response if response.strip() else None
             elif run_status.status == "failed":
-                print(f"Assistant run failed for ticket {ticket_id}: {run_status.last_error}")
+                logger.error(f"Assistant run failed for ticket {ticket_id}: {run_status.last_error}")
             else:
-                print(f"AI response exceeded 15 seconds for ticket {ticket_id}")
+                logger.info(f"AI response exceeded 15 seconds for ticket {ticket_id}")
             return None
         except Exception as e:
-            print(f"Error polling AI response for ticket {ticket_id}: {e}")
+            logger.error(f"Error polling AI response for ticket {ticket_id}: {e}")
             return None
 
     # Fallback to GPT-4o-mini for error or product-related questions
@@ -520,7 +605,7 @@ class AIAssistant(commands.Cog):
             )
             return response.choices[0].message.content.strip()
         except Exception as e:
-            print(f"Error in GPT-4o-mini fallback for ticket {ticket_id}: {e}")
+            logger.error(f"Error in GPT-4o-mini fallback for ticket {ticket_id}: {e}")
             return None
 
 # Setup function to register the AIAssistant cog with the bot
