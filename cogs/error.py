@@ -1,15 +1,19 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
-from config import ALLOWED_ROLE_IDS, VERIFIED_CUSTOMER_ROLE_ID
+from config import ALLOWED_ROLE_IDS, VERIFIED_CUSTOMER_ROLE_ID  # Import role IDs from config
 
+# Define an Error cog to provide fixes for common error codes across various products
 class Error(commands.Cog):
     def __init__(self, bot):
-        self.bot = bot
+        self.bot = bot  # Store the bot instance for use in commands
 
+    # Command to provide fixes for Apex Lite error codes
     @app_commands.command(name="apexliteerror", description="Fixes for common Apex Lite error codes")
     async def apexliteerror(self, interaction: discord.Interaction):
+        # Extract user's role IDs for permission checking
         user_roles = [role.id for role in interaction.user.roles]
+        # Check if user has any allowed role or verified customer role
         if any(role_id in ALLOWED_ROLE_IDS + VERIFIED_CUSTOMER_ROLE_ID for role_id in user_roles):
             embed = discord.Embed(
                 title="🔧 Apex Lite Error Fixes",
@@ -19,6 +23,7 @@ class Error(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Error Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
         else:
+            # Send access denied message if user lacks proper roles
             embed = discord.Embed(
                 title="❌ Access Denied",
                 description="You don’t have permission to use this command.",
@@ -27,6 +32,7 @@ class Error(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Error Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide fixes for Apex Kernaim error codes
     @app_commands.command(name="apexkernaimerror", description="Fixes for common Apex Kernaim error codes")
     async def apexkernaimerror(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -57,6 +63,7 @@ class Error(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Error Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide fixes for COD Kernaim error codes
     @app_commands.command(name="codkernaimerror", description="Fixes for common COD Kernaim error codes")
     async def codkernaimerror(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -87,6 +94,7 @@ class Error(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Error Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide fixes for COD RUT Unlocker error codes
     @app_commands.command(name="codrutunlockerror", description="Fixes for common COD RUT Unlocker error codes")
     async def codrutunlockerror(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -117,6 +125,7 @@ class Error(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Error Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide fixes for COD RUT UAV error codes
     @app_commands.command(name="codrutuaverror", description="Fixes for common COD RUT UAV error codes")
     async def codrutuaverror(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -147,6 +156,7 @@ class Error(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Error Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide fixes for EFT Exo Arena error codes
     @app_commands.command(name="eftexoarenaerror", description="Fixes for common EFT Exo Arena error codes")
     async def eftexoarenaerror(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -182,6 +192,7 @@ class Error(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Error Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide fixes for EFT Exo error codes
     @app_commands.command(name="eftexoerror", description="Fixes for common EFT Exo error codes")
     async def eftexoerror(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -217,6 +228,7 @@ class Error(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Error Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide fixes for EFT NextCheat Full error codes
     @app_commands.command(name="eftnextfullerror", description="Fixes for common EFT NextCheat Full error codes")
     async def eftnextfullerror(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -242,6 +254,7 @@ class Error(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Error Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide fixes for EFT NextCheat Lite error codes
     @app_commands.command(name="eftnextliteerror", description="Fixes for common EFT NextCheat Lite error codes")
     async def eftnextliteerror(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -267,6 +280,7 @@ class Error(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Error Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide fixes for FiveM HX error codes
     @app_commands.command(name="fivemhxerror", description="Fixes for common FiveM HX error codes")
     async def fivemhxerror(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -317,6 +331,7 @@ class Error(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Error Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide fixes for FiveM TZ External error codes
     @app_commands.command(name="fivemtzexterror", description="Fixes for common FiveM TZ External error codes")
     async def fivemtzexterror(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -337,6 +352,7 @@ class Error(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Error Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide fixes for FiveM TZ Internal error codes
     @app_commands.command(name="fivemtzinterror", description="Fixes for common FiveM TZ Internal error codes")
     async def fivemtzinterror(self, interaction: discord.Interaction):  # Fixed function name typo
         user_roles = [role.id for role in interaction.user.roles]
@@ -357,6 +373,7 @@ class Error(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Error Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide fixes for Fortnite Disconnect External error codes
     @app_commands.command(name="fndcexterror", description="Fixes for common Fortnite Disconnect External error codes")
     async def fndcexterror(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -382,6 +399,7 @@ class Error(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Error Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide fixes for HWID Spoofer Exception error codes
     @app_commands.command(name="hwidexceptionerror", description="Fixes for common HWID Spoofer Exception error codes")
     async def hwidexceptionerror(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -432,6 +450,7 @@ class Error(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Error Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide fixes for Marvel Rivals Klar error codes
     @app_commands.command(name="marvelklarerror", description="Fixes for common Marvel Rivals Klar error codes")
     async def marvelklarerror(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -517,6 +536,7 @@ class Error(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Error Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide fixes for R6 Ring1 error codes
     @app_commands.command(name="r6ring1error", description="Fixes for common R6 Ring1 error codes")
     async def r6ring1error(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -537,6 +557,7 @@ class Error(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Error Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide fixes for Rust Fluent error codes
     @app_commands.command(name="rustfluenterror", description="Fixes for common Rust Fluent error codes")
     async def rustfluenterror(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -577,6 +598,7 @@ class Error(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Error Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide fixes for Rust Matrix error codes
     @app_commands.command(name="rustmatrixerror", description="Fixes for common Rust Matrix error codes")
     async def rustmatrixerror(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -597,6 +619,7 @@ class Error(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Error Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide fixes for Rust Disconnect External error codes
     @app_commands.command(name="rustdcexterror", description="Fixes for common Rust Disconnect External error codes")
     async def rustdcexterror(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -622,6 +645,7 @@ class Error(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Error Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide fixes for Rust Recoil Script error codes
     @app_commands.command(name="rustrecoilerror", description="Fixes for common Rust Recoil Script error codes")
     async def rustrecoilerror(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -647,5 +671,6 @@ class Error(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Error Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+# Setup function to register the Error cog with the bot
 async def setup(bot):
-    await bot.add_cog(Error(bot))
+    await bot.add_cog(Error(bot))  # Add the Error cog to the bot instance

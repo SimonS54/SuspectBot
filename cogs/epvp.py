@@ -1,16 +1,21 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
-from config import ALLOWED_ROLE_IDS, VERIFIED_CUSTOMER_ROLE_ID
+from config import ALLOWED_ROLE_IDS, VERIFIED_CUSTOMER_ROLE_ID  # Import role IDs from config
 
+# Define an EPVP cog to guide users on leaving vouches and trade reviews on Elitepvpers
 class EPVP(commands.Cog):
     def __init__(self, bot):
-        self.bot = bot
+        self.bot = bot  # Store the bot instance for use in commands
 
+    # Command to guide users on how to leave a vouch on Elitepvpers
     @app_commands.command(name="epvp", description="How to leave a vouch on Elitepvpers")
     async def epvp(self, interaction: discord.Interaction):
+        # Extract user's role IDs for permission checking
         user_roles = [role.id for role in interaction.user.roles]
+        # Check if user has any allowed role or verified customer role
         if any(role_id in ALLOWED_ROLE_IDS + VERIFIED_CUSTOMER_ROLE_ID for role_id in user_roles):
+            # Create an embed with step-by-step vouch instructions
             embed = discord.Embed(
                 title="⭐ Elitepvpers Vouch Guide",
                 description="**1️⃣ Choose Your Product**\nSelect the post for your purchased product from the categories below, then follow the remaining steps:",
@@ -65,8 +70,10 @@ class EPVP(commands.Cog):
             )
             embed.set_footer(text="Powered by SuspectServices • EPVP Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
+            # Send a follow-up GIF for visual engagement
             await interaction.followup.send("https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYzc3d2Y1b2JzcWQ3czFhOXVxZnU0a2ZhN3VzNGE3a2Y3dm95a2t3ciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/8OOU4QnsKQOqVrfA3w/giphy.gif")
         else:
+            # Send access denied message if user lacks proper roles
             embed = discord.Embed(
                 title="❌ Access Denied",
                 description="You don’t have permission to use this command.",
@@ -75,10 +82,12 @@ class EPVP(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • EPVP Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to guide users on leaving a positive trade review on Elitepvpers
     @app_commands.command(name="epvptrade", description="How to leave a positive trade review on Elitepvpers")
     async def epvptrade(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
         if any(role_id in ALLOWED_ROLE_IDS + VERIFIED_CUSTOMER_ROLE_ID for role_id in user_roles):
+            # Create an embed with instructions for leaving a trade review
             embed = discord.Embed(
                 title="✅ Trade Accepted - Next Steps",
                 description="Thanks for your trade! Follow these steps to claim your key:",
@@ -99,8 +108,10 @@ class EPVP(commands.Cog):
             )
             embed.set_footer(text="Powered by SuspectServices • EPVP Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
+            # Send a follow-up image link for visual guidance
             await interaction.followup.send("https://imgur.com/a/t6O6hQa")
         else:
+            # Send access denied message if user lacks proper roles
             embed = discord.Embed(
                 title="❌ Access Denied",
                 description="You don’t have permission to use this command.",
@@ -109,5 +120,6 @@ class EPVP(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • EPVP Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+# Setup function to register the EPVP cog with the bot
 async def setup(bot):
-    await bot.add_cog(EPVP(bot))
+    await bot.add_cog(EPVP(bot))  # Add the EPVP cog to the bot instance

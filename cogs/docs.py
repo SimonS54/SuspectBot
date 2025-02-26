@@ -1,16 +1,21 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
-from config import ALLOWED_ROLE_IDS, VERIFIED_CUSTOMER_ROLE_ID
+from config import ALLOWED_ROLE_IDS, VERIFIED_CUSTOMER_ROLE_ID  # Import role IDs from config
 
+# Define a Documentation cog to provide setup guides for various products
 class Documentation(commands.Cog):
     def __init__(self, bot):
-        self.bot = bot
+        self.bot = bot  # Store the bot instance for use in commands
 
+    # Command to provide the setup guide for Apex Lite
     @app_commands.command(name="apexlite", description="Guide for Apex Lite")
     async def apexlite(self, interaction: discord.Interaction):
+        # Extract user's role IDs for permission checking
         user_roles = [role.id for role in interaction.user.roles]
+        # Check if user has any allowed role or verified customer role
         if any(role_id in ALLOWED_ROLE_IDS + VERIFIED_CUSTOMER_ROLE_ID for role_id in user_roles):
+            # Create an embed with instructions for Apex Lite
             embed = discord.Embed(
                 title="📘 Apex Lite Guide",
                 description="Get started with Apex Lite—here’s how:",
@@ -25,6 +30,7 @@ class Documentation(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Documentation Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
         else:
+            # Send access denied message if user lacks proper roles
             embed = discord.Embed(
                 title="❌ Access Denied",
                 description="You don’t have permission to use this command.",
@@ -33,6 +39,7 @@ class Documentation(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Documentation Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide the setup guide for Apex Kernaim
     @app_commands.command(name="apexkernaim", description="Guide for Apex Kernaim")
     async def apexkernaim(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -58,6 +65,7 @@ class Documentation(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Documentation Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide the setup guide for COD Kernaim
     @app_commands.command(name="codkernaim", description="Guide for COD Kernaim")
     async def codkernaim(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -83,6 +91,7 @@ class Documentation(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Documentation Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide the setup guide for COD RUT Unlock
     @app_commands.command(name="codrutunlock", description="Guide for COD RUT Unlock")
     async def codrutunlock(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -108,6 +117,7 @@ class Documentation(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Documentation Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide the setup guide for COD RUT UAV
     @app_commands.command(name="codrutuav", description="Guide for COD RUT UAV")
     async def codrutuav(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -133,6 +143,7 @@ class Documentation(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Documentation Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide the setup guide for EFT Exo Arena
     @app_commands.command(name="eftexoarena", description="Guide for EFT Exo Arena")
     async def eftexoarena(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -158,6 +169,7 @@ class Documentation(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Documentation Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide the setup guide for EFT Exo
     @app_commands.command(name="eftexo", description="Guide for EFT Exo")
     async def eftexo(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -183,6 +195,7 @@ class Documentation(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Documentation Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide the setup guide for EFT NextCheat Full
     @app_commands.command(name="eftnextfull", description="Guide for EFT NextCheat Full")
     async def eftnextfull(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -208,6 +221,7 @@ class Documentation(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Documentation Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide the setup guide for EFT NextCheat Lite
     @app_commands.command(name="eftnextlite", description="Guide for EFT NextCheat Lite")
     async def eftnextlite(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -233,6 +247,7 @@ class Documentation(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Documentation Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide the setup guide for FiveM HX
     @app_commands.command(name="fivemhx", description="Guide for FiveM HX")
     async def fivemhx(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -258,6 +273,7 @@ class Documentation(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Documentation Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide the setup guide for FiveM TZ External
     @app_commands.command(name="fivemtzext", description="Guide for FiveM TZ External")
     async def fivemtzext(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -283,6 +299,7 @@ class Documentation(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Documentation Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide the setup guide for FiveM TZ Internal
     @app_commands.command(name="fivemtzint", description="Guide for FiveM TZ Internal")
     async def fivemtzint(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -308,6 +325,7 @@ class Documentation(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Documentation Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide the setup guide for Fortnite Disconnect External
     @app_commands.command(name="fndcext", description="Guide for Fortnite Disconnect External")
     async def fndcext(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -333,6 +351,7 @@ class Documentation(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Documentation Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide the setup guide for HWID Spoofer Exception
     @app_commands.command(name="hwidexception", description="Guide for HWID Spoofer Exception")
     async def hwidexception(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -358,6 +377,7 @@ class Documentation(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Documentation Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide the setup guide for Marvel Rivals Klar
     @app_commands.command(name="marvelklar", description="Guide for Marvel Rivals Klar")
     async def marvelklar(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -383,6 +403,7 @@ class Documentation(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Documentation Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide the setup guide for R6 Ring1
     @app_commands.command(name="r6ring1", description="Guide for R6 Ring1")
     async def r6ring1(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -408,6 +429,7 @@ class Documentation(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Documentation Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide the setup guide for Rust Fluent
     @app_commands.command(name="rustfluent", description="Guide for Rust Fluent")
     async def rustfluent(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -433,6 +455,7 @@ class Documentation(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Documentation Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide the setup guide for Rust Matrix
     @app_commands.command(name="rustmatrix", description="Guide for Rust Matrix")
     async def rustmatrix(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -458,6 +481,7 @@ class Documentation(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Documentation Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide the setup guide for Rust Disconnect External
     @app_commands.command(name="rustdcext", description="Guide for Rust Disconnect External")
     async def rustdcext(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -483,6 +507,7 @@ class Documentation(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Documentation Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide the setup guide for Rust Recoil Script
     @app_commands.command(name="rustrecoil", description="Guide for Rust Recoil Script")
     async def rustrecoil(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -508,5 +533,6 @@ class Documentation(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Documentation Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+# Setup function to register the Documentation cog with the bot
 async def setup(bot):
-    await bot.add_cog(Documentation(bot))
+    await bot.add_cog(Documentation(bot))  # Add the Documentation cog to the bot instance

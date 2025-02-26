@@ -3,14 +3,19 @@ from discord import app_commands
 from discord.ext import commands
 from config import ALLOWED_ROLE_IDS, VERIFIED_CUSTOMER_ROLE_ID
 
+# Define a Support cog to handle support-related commands for the bot
 class Support(commands.Cog):
     def __init__(self, bot):
-        self.bot = bot
+        self.bot = bot  # Store the bot instance for use in commands
 
+    # Command to provide a support tool for troubleshooting
     @app_commands.command(name="supporttool", description="Get our Support Tool to troubleshoot issues quickly")
     async def support_tool(self, interaction: discord.Interaction):
+        # Extract user's role IDs for permission checking
         user_roles = [role.id for role in interaction.user.roles]
+        # Check if user has any allowed role or verified customer role
         if any(role_id in ALLOWED_ROLE_IDS + VERIFIED_CUSTOMER_ROLE_ID for role_id in user_roles):
+            # Create an embed with support tool instructions
             embed = discord.Embed(
                 title="🔧 Support Tool Assistant",
                 description="Save time and solve issues faster with our automated Support Tool! Follow these quick steps:",
@@ -29,6 +34,7 @@ class Support(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Support Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
         else:
+            # Send access denied message if user lacks proper roles
             embed = discord.Embed(
                 title="❌ Access Denied",
                 description="You don’t have permission to use this command.",
@@ -37,9 +43,11 @@ class Support(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Support Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to guide users on setting up AnyDesk for remote support
     @app_commands.command(name="anydesk", description="Set up AnyDesk for remote support assistance")
     async def anydesk(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
+        # Restrict this command to users with ALLOWED_ROLE_IDS only
         if any(role_id in ALLOWED_ROLE_IDS for role_id in user_roles):
             embed = discord.Embed(
                 title="🖥️ Remote Support with AnyDesk",
@@ -67,9 +75,11 @@ class Support(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Support Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to assist users in enabling/disabling virtualization
     @app_commands.command(name="virtualization", description="Guide to enable/disable Virtualization")
     async def virtualization(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
+        # Check permissions for both allowed roles and verified customers
         if not any(role_id in ALLOWED_ROLE_IDS + VERIFIED_CUSTOMER_ROLE_ID for role_id in user_roles):
             embed = discord.Embed(
                 title="❌ Access Denied",
@@ -79,6 +89,7 @@ class Support(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Support Section", icon_url=self.bot.user.avatar.url)
             return await interaction.response.send_message(embed=embed)
 
+        # Initial embed for CPU selection
         embed = discord.Embed(
             title="🖥️ Virtualization Setup Guide",
             description="Need to toggle Virtualization? Select your CPU type below to get started!",
@@ -86,9 +97,10 @@ class Support(commands.Cog):
         )
         embed.set_footer(text="Powered by SuspectServices • Support Section", icon_url=self.bot.user.avatar.url)
 
+        # View class for CPU selection buttons (AMD/Intel)
         class CPUSelectView(discord.ui.View):
             def __init__(self):
-                super().__init__(timeout=60)
+                super().__init__(timeout=60)  # Set timeout to 60 seconds
 
             @discord.ui.button(label="AMD", style=discord.ButtonStyle.red, emoji="🔴")
             async def amd_button(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -100,6 +112,7 @@ class Support(commands.Cog):
                 embed.description = "You chose **Intel**! Pick your motherboard brand below:"
                 await interaction.response.edit_message(embed=embed, view=IntelView())
 
+        # View class for AMD motherboard selection
         class AMDView(discord.ui.View):
             def __init__(self):
                 super().__init__(timeout=60)
@@ -119,6 +132,7 @@ class Support(commands.Cog):
                 embed.description = "🔧 **Gigabyte (AMD)** Virtualization Guide: [Watch Tutorial](https://www.youtube.com/watch?v=dpKGbtWl9Mo)\n\n*Note: BIOS layouts may differ - ask for help if needed!*"
                 await interaction.response.edit_message(embed=embed, view=None)
 
+        # View class for Intel motherboard selection
         class IntelView(discord.ui.View):
             def __init__(self):
                 super().__init__(timeout=60)
@@ -140,6 +154,7 @@ class Support(commands.Cog):
 
         await interaction.response.send_message(embed=embed, view=CPUSelectView())
 
+    # Command to guide users on enabling/disabling TPM
     @app_commands.command(name="tpm", description="Guide to enable/disable TPM")
     async def tpm(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -213,6 +228,7 @@ class Support(commands.Cog):
 
         await interaction.response.send_message(embed=embed, view=CPUSelectView())
 
+    # Command to guide users on enabling/disabling Secure Boot
     @app_commands.command(name="secureboot", description="Guide to enable/disable Secure Boot")
     async def secureboot(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -286,6 +302,7 @@ class Support(commands.Cog):
 
         await interaction.response.send_message(embed=embed, view=CPUSelectView())
 
+    # Command to help users disable Core Isolation
     @app_commands.command(name="coreisolation", description="Disable Core Isolation for compatibility")
     async def coreisolation(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -316,6 +333,7 @@ class Support(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Support Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to provide Visual C++ and DirectX installation links
     @app_commands.command(name="vc64", description="Install Visual C++ and DirectX dependencies")
     async def vc64(self, interaction: discord.Interaction):
         user_roles = [role.id for role in interaction.user.roles]
@@ -346,5 +364,6 @@ class Support(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • Support Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+# Setup function to add the Support cog to the bot
 async def setup(bot):
-    await bot.add_cog(Support(bot))
+    await bot.add_cog(Support(bot))  # Register the Support cog with the bot instance

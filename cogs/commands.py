@@ -1,16 +1,21 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
-from config import ALLOWED_ROLE_IDS, VERIFIED_CUSTOMER_ROLE_ID
+from config import ALLOWED_ROLE_IDS, VERIFIED_CUSTOMER_ROLE_ID  # Import role IDs from config
 
+# Define a GeneralCommands cog for bot-wide utilities and information
 class GeneralCommands(commands.Cog):
     def __init__(self, bot):
-        self.bot = bot
+        self.bot = bot  # Store the bot instance for use in commands
 
+    # Command to display a list of all available bot commands
     @app_commands.command(name="bothelp", description="List of all available bot commands")
     async def bothelp(self, interaction: discord.Interaction):
+        # Extract user's role IDs for permission checking
         user_roles = [role.id for role in interaction.user.roles]
+        # Restrict this command to users with ALLOWED_ROLE_IDS (e.g., staff)
         if any(role_id in ALLOWED_ROLE_IDS for role_id in user_roles):
+            # Create an embed with a categorized list of all bot commands
             embed = discord.Embed(
                 title="📋 SuspectBot Command List",
                 description="Here’s everything you can do with SuspectBot—find the command you need below!",
@@ -84,6 +89,7 @@ class GeneralCommands(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • General Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
         else:
+            # Send access denied message if user lacks proper roles
             embed = discord.Embed(
                 title="❌ Access Denied",
                 description="You don’t have permission to use this command.",
@@ -92,10 +98,14 @@ class GeneralCommands(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • General Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+    # Command to guide users on leaving a review for SuspectServices
     @app_commands.command(name="review", description="Request to leave a review for SuspectServices")
     async def review(self, interaction: discord.Interaction):
+        # Extract user's role IDs for permission checking
         user_roles = [role.id for role in interaction.user.roles]
+        # Allow users with either ALLOWED_ROLE_IDS or VERIFIED_CUSTOMER_ROLE_ID
         if any(role_id in ALLOWED_ROLE_IDS + VERIFIED_CUSTOMER_ROLE_ID for role_id in user_roles):
+            # Create an embed with instructions for leaving a review
             embed = discord.Embed(
                 title="🌟 Leave a Review",
                 description="Loved our products and support? We’d appreciate your feedback—it helps us grow!",
@@ -109,6 +119,7 @@ class GeneralCommands(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • General Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
         else:
+            # Send access denied message if user lacks proper roles
             embed = discord.Embed(
                 title="❌ Access Denied",
                 description="You don’t have permission to use this command.",
@@ -117,5 +128,6 @@ class GeneralCommands(commands.Cog):
             embed.set_footer(text="Powered by SuspectServices • General Section", icon_url=self.bot.user.avatar.url)
             await interaction.response.send_message(embed=embed)
 
+# Setup function to register the GeneralCommands cog with the bot
 async def setup(bot):
-    await bot.add_cog(GeneralCommands(bot))
+    await bot.add_cog(GeneralCommands(bot))  # Add the GeneralCommands cog to the bot instance
