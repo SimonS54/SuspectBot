@@ -1,12 +1,36 @@
 import discord
 import asyncio
 from discord.ext import commands
+from discord.ui import Button, View
 from config import LOG_CHANNEL_ID, FILTERED_CHANNEL_ID, ALLOWED_WORDS, ALLOWED_ROLE_IDS  # Import configuration constants
 
 # Define a MessageFilter cog to monitor and filter messages in a specific channel
 class MessageFilter(commands.Cog):
     def __init__(self, bot):
         self.bot = bot  # Store the bot instance for use in the cog
+
+    # Custom view class for the "Restore" button
+    class RestoreView(View):
+        def __init__(self, original_message_content, original_author, original_channel):
+            super().__init__(timeout=None)  # No timeout, so the button persists
+            self.original_message_content = original_message_content
+            self.original_author = original_author
+            self.original_channel = original_channel
+
+        @discord.ui.button(label="Restore Message", style=discord.ButtonStyle.green)
+        async def restore_button(self, interaction: discord.Interaction, button: Button):
+            # Check if the user has an allowed role
+            if not any(role.id in ALLOWED_ROLE_IDS for role in interaction.user.roles):
+                await interaction.response.send_message("You don’t have permission to restore messages!", ephemeral=True)
+                return
+
+            # Repost the original message in the original channel
+            await self.original_channel.send(f"{self.original_author.mention}: {self.original_message_content}")
+            await interaction.response.send_message("Message restored successfully!", ephemeral=True)
+
+            # Optionally, disable the button after use
+            button.disabled = True
+            await interaction.message.edit(view=self)
 
     # Listener to process every message sent in the server
     @commands.Cog.listener()
@@ -21,6 +45,7 @@ class MessageFilter(commands.Cog):
 
         # Get the log channel for recording deleted messages
         log_channel = self.bot.get_channel(LOG_CHANNEL_ID)
+        filtered_channel = self.bot.get_channel(FILTERED_CHANNEL_ID)
 
         # Only filter messages in the designated filtered channel
         if message.channel.id == FILTERED_CHANNEL_ID:
@@ -35,12 +60,15 @@ class MessageFilter(commands.Cog):
                     color=discord.Color.red()
                 )
                 deleted_message_embed.set_footer(text="Powered by SuspectServices • Filter Section", icon_url=self.bot.user.avatar.url)
-                await log_channel.send(embed=deleted_message_embed)
+
+                # Add the "Restore" button to the embed
+                view = self.RestoreView(message.content, message.author, filtered_channel)
+                await log_channel.send(embed=deleted_message_embed, view=view)
 
                 # Create a temporary notification embed to inform the user
                 notification_embed = discord.Embed(
                     title="❌ Message Removed",
-                    description=f"{message.author.mention}, your message was deleted—it it contained not allowed words.",
+                    description=f"{message.author.mention}, your message was deleted—it contained unallowed words.",
                     color=discord.Color.red()
                 )
                 notification_embed.set_footer(text="Powered by SuspectServices • Filter Section", icon_url=self.bot.user.avatar.url)
