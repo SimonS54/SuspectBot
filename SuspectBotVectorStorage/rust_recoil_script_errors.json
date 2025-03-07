@@ -1,0 +1,9 @@
+{
+  "guide": "Rust Recoil Script Errors Guide",
+  "sections": [
+    {
+      "title": "Error: Cannot Sync",
+      "text": "Go to Windows Settings > 'Change date and time' > 'Sync now', then retry."
+    }
+  ]
+}

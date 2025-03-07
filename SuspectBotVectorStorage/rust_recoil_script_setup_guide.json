@@ -1,0 +1,13 @@
+{
+  "guide": "Rust Recoil Script Setup Guide",
+  "sections": [
+    {
+      "title": "Setup",
+      "text": "Rust Recoil Script Setup Guide: https://priv10.net/LIAM/SuspectSetup.exe\n\nDownload the loader here: https://priv10.net/LIAM/SuspectLoader.exe\n\nDownload our support tool here: https://mega.nz/file/ioJQ3TAK#khDxBBZ0_LiX__6zEnfr2N6PG1_HDuv271J5rFus7yQ\n\nMake everything green in the support tool before downloading the loader!"
+    },
+    {
+      "title": "Instructions",
+      "text": "Run loader as Admin\n\nEnter Key\n\nOpen Game\nMake sure you input the correct sensitivity and ADS sensitivity so it matches your in game settings (if you do not do this, it will not work$"
+    }
+  ]
+}

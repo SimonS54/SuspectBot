@@ -1,0 +1,21 @@
+{
+  "guide": "Kernaim COD Setup Guide",
+  "sections": [
+    {
+      "title": "Setup",
+      "text": "Download the loader here: https://mega.nz/folder/cr5nQKqL#xCj5BVBXkvPtsUnCDjKwsQ\n\nDownload our support tool here: https://mega.nz/file/ioJQ3TAK#khDxBBZ0_LiX__6zEnfr2N6PG1_HDuv271J5rFus7yQ\n\nMake everything green in the support tool before downloading the loader!"
+    },
+    {
+      "title": "Instructions",
+      "text": "Download and install Microsoft Visual C++ from: https://aka.ms/vs/17/release/vc_redist.x64.exe.\n\nUninstall any antivirus; deactivation is not enough.\n\nDisable Real-Time protection in Windows Defender; you should use tool: https://www.sordum.org/9480/defender-control-v2-1\n\nClose any game or launcher (Steam, Origin, Bnet, etc.) and disable any overlay (Discord, Geforce Experience, MSI Afterburner, MedalTV, etc.).\n\nDisable both Game Mode and GPU Acceleration in your Windows settings.\n\nMake sure you don't start the game or launcher with admin privileges."
+    },
+    {
+      "title": "First Start",
+      "text": "Download your loader by clicking on the button at the bottom of this page and move it to your USB flash drive.\n\nOpen the loader as admin and login with your key (in the email received after your purchase).\n\nClick on \"Start\" and wait for the success popup.\n\nClose the loader, and you can remove your USB from your PC.\n\nStart the launcher, then open your game.\n\nMake sure your game is set to \"Borderless\" or \"Windowed\" in settings."
+    },
+    {
+      "title": "The Essential Troubleshooting",
+      "text": "Restart your computer and simply retry again.\n\nInstall Microsoft Visual C++ by visiting https://aka.ms/vs/17/release/vc_redist.x64.exe.\n\nCompletely disable Windows Defender by using the tool available at https://www.sordum.org/9480/defender-control-v2-1.\n\nUninstall any other antivirus software, including Windows Defender.\n\nUninstall FaceIt, Vanguard, ESEA (anticheats which always run in background).\n\nDisable any overclocking and remove applications like MSI Afterburner. Reset BIOS settings to default if needed.\n\nEnsure that Secure Boot is disabled in the BIOS settings.\n\nDisable Memory Integrity in Windows Device Security - Core isolation.\n\nEnsure that Windows is up to date (Windows 11 is recommended)."
+    }
+  ]
+}

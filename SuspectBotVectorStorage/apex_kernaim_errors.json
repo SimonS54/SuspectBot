@@ -1,0 +1,13 @@
+{
+  "guide": "COD Kernaim Errors Guide",
+  "sections": [
+    {
+      "title": "Error 0xR / 0xD / 0xI or Infinite Loading",
+      "text": "Boot the loader while connected to a VPN."
+    },
+    {
+      "title": "Error 0xC1843",
+      "text": "Ensure no anticheat (VGK, Faceit, EAC, BE) or antivirus is running."
+    }
+  ]
+}

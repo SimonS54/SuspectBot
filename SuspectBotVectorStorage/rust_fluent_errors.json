@@ -1,0 +1,21 @@
+{
+  "guide": "Rust Fluent Errors Guide",
+  "sections": [
+    {
+      "title": "Error 0x718",
+      "text": "Uninstall Faceit/Vanguard, disable antivirus, and restart."
+    },
+    {
+      "title": "Error 0x717",
+      "text": "Uninstall Faceit/Vanguard, disable antivirus, and restart."
+    },
+    {
+      "title": "Error 0x712",
+      "text": "1. Verify Rust files via Steam.\n2. Restart PC.\n3. Launch Rust to main menu without Fluent.\n4. Close Rust and reinject—or contact support."
+    },
+    {
+      "title": "Error 0x757",
+      "text": "1. Disable Fast Boot in BIOS.\n2. Set UAC to lowest level.\n3. Check if 'luafv' is running (`fltmc` in admin CMD); if not, run `sc config luafv start=boot` and `sc start luafv`.\n4. Disable antivirus and uninstall Faceit/Vanguard.\n5. Restart and reinject—or contact support."
+    }
+  ]
+}

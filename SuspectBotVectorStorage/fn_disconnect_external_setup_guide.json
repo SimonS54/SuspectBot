@@ -1,0 +1,21 @@
+{
+  "guide": "Disconnect External FN Setup Guide",
+  "sections": [
+    {
+      "title": "Setup",
+      "text": "Download the loader here: https://lewislitt.life/Store/Install.html\n\nDownload our support tool here: https://mega.nz/file/ioJQ3TAK#khDxBBZ0_LiX__6zEnfr2N6PG1_HDuv271J5rFus7yQ\n\nMake everything green in the support tool before downloading the loader!"
+    },
+    {
+      "title": "Instructions",
+      "text": "Disable any anti virus software and disable any running anticheats (faceit, vanguard, etc)\n\nDisable real time protection in windows security as the loader will most likely be automatically deleted by it\n\nExtract the Visual-C-Runtimes.zip and run install_all.bat as admin\n\nGo to https://lewislitt.life/Store/Install.html and enter a key and wait for a custom loader build to be downloaded"
+    },
+    {
+      "title": "Loader Account Activation",
+      "text": "Launch loader and either login to an existing account or register a new one using a license\n\nOnce logged in, head over to the products page and select the product you would like to use and press inject"
+    },
+    {
+      "title": "Loader Steel Series Injection",
+      "text": "Once the loader is waiting for SteelSeries to be open (download: https://steelseries.com/gg/moments/download). Download and login to SteelSeries\n\nYou must then enable SteelSeries moments in order for the overlay to work."
+    }
+  ]
+}

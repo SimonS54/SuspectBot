@@ -1,0 +1,17 @@
+{
+  "guide": "CS2 Predator Setup Guide",
+  "sections": [
+    {
+      "title": "Activation",
+      "text": "Activate your product key at: https://predator.systems/products/ (registration required)"
+    },
+    {
+      "title": "Troubleshooting Steps",
+      "text": "If you are experiencing troubles launching our software, please follow these steps:\n\n- Disable your antivirus and delete it if necessary\n- Disable Microsoft Defender\n- Disable all driver anti-cheats:\n  - For Faceit: Open cmd as admin and run: \"sc stop faceit\"\n  - For Valorant: Open cmd as admin and run: \"sc stop vgc\" then \"sc stop vgk\"\n- Ensure you are NOT using the \"-vulcan\" launch option (unsupported)\n- Make sure the time in Windows settings is synchronized"
+    },
+    {
+      "title": "Known Problems & Solutions",
+      "text": "1) Problem: \"An error occured in the secure channel support\" / \"The request has timed out\" / \"The operation timed out\"\n   - Solution: Traffic is being blocked (by an anti-cheat, antivirus, firewall, or ISP). Fully uninstall your antivirus and any other anti-cheats, resync your time and region in Windows settings, and try enabling/disabling your VPN.\n\n2) Problem: \"Internal public server error\"\n   - Solution: Traffic is being blocked (by an anti-cheat, antivirus, firewall, or ISP). Fully uninstall your antivirus and any other anti-cheats.\n\n3) Problem: \"Antivirus Interference detected\"\n   - Solution: Traffic is being blocked (by an anti-cheat, antivirus, or malware). Fully uninstall your antivirus and any other anti-cheats, and scan your PC using a tool (e.g., https://free.drweb.ru/cureit/).\n\n4) Problem: Reason: [<code>] sym: <some info>\n   - Solution: Create a ticket in our support section (https://predator.systems/support) and attach a screenshot of the information (Press WIN + R, type \"winver\").\n\n5) Problem: Reason: modules::load_module: failed to create section\n   - Solution: Fully uninstall your antivirus and any other anti-cheats."
+    }
+  ]
+}

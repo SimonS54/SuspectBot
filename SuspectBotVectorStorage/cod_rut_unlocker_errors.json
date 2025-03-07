@@ -1,0 +1,13 @@
+{
+  "guide": "COD RUT Unlock Errors Guide",
+  "sections": [
+    {
+      "title": "Error 0",
+      "text": "Redownload the launcher and launch it while connected to a VPN."
+    },
+    {
+      "title": "Error 3",
+      "text": "Ensure no anticheat (VGK, Faceit, EAC, BE) or antivirus is running."
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "guide": "HWID Spoofer Exception Errors Guide",
+  "sections": [
+    {
+      "title": "Error #10000004",
+      "text": "Ensure no AV/EDR is running and your system isn’t infected by a rootkit."
+    },
+    {
+      "title": "Error #37070000",
+      "text": "Ensure Faceit/ESEA/Vanguard drivers aren’t running."
+    },
+    {
+      "title": "Error #3B000000",
+      "text": "Disable Core Isolation and Memory Integrity in Windows Defender. Run `bcdedit /set hypervisorlaunchtype off` in admin CMD, restart PC, or disable Intel VT-X/AMD SVM in BIOS. Ensure Vanguard/Faceit/ESEA are uninstalled."
+    },
+    {
+      "title": "Error #37100022",
+      "text": "Hold SHIFT and restart your PC."
+    },
+    {
+      "title": "Error #3C000101",
+      "text": "Windows build number too low—minimum supported is 19041."
+    },
+    {
+      "title": "Error #3C000110",
+      "text": "Multiple launcher instances detected—close all but one."
+    }
+  ]
+}
